@@ -1,0 +1,42 @@
+
+<% provide(:title,"Home") %>
+<html>
+<head>
+  <title> <%= full_title(yield(:title)) %> </title>
+</head>
+<body>
+
+
+<% if user_signed_in? %>
+
+
+  <div class="row">
+    <aside class="col-md-4">
+      <section class="user_info">
+        <%= render 'shared/user_info' %>
+      </section>
+
+
+<% else %>
+
+
+
+  <div class="center jumbotron">
+    <h1>Welcome to the Scale Tools</h1>
+
+    <h2>
+      This is the home page for the
+      <a href="https://scaletools.com/">Scale Tools </a>
+      - sample application.
+    </h2>
+
+    <%= link_to "Sign up now!", new_user_registration_path , class: "btn btn-lg btn-primary" %>
+    <p></p>
+    <%= link_to image_tag("rails.png", alt: "Rails logo"),
+                'https://scaletools.com/' %>
+  </div>
+  </aside>
+  </div>
+  </body>
+  </html>
+<% end %>
