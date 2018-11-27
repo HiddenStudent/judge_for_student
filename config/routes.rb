@@ -17,8 +17,9 @@ Rails.application.routes.draw do
   get 'administration_tasks', to: 'teacher_admin#tasks'
 
   resources :teacher_admin_controller
+  resources :answ
 
-
+  post 'answ_create', to: 'answ#create_answ'
 
   match 'users/:id' => 'users#destroy', :via => :delete, :as => :admin_destroy_user
 
