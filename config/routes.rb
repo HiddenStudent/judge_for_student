@@ -8,6 +8,18 @@ Rails.application.routes.draw do
   root to: "static_pages#home"
 
 
+  get 'administration', to: 'teacher_admin#index'
+
+  get 'administration_new', to: 'teacher_admin#new'
+
+  post 'administration_create_task', to: 'teacher_admin#create_task'
+
+  get 'administration_tasks', to: 'teacher_admin#tasks'
+
+  resources :teacher_admin_controller
+
+
+
   match 'users/:id' => 'users#destroy', :via => :delete, :as => :admin_destroy_user
 
   get '/index_user', to: 'users#index'

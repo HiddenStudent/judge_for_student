@@ -1,0 +1,2 @@
+class AnswController < ApplicationController
+end
