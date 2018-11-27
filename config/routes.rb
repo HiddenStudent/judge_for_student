@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get 'atasks/new'
+
+  get 'atasks/edit'
+
   get 'static_pages/index'
 
   devise_for :users
@@ -18,7 +22,7 @@ Rails.application.routes.draw do
 
   resources :teacher_admin_controller
   resources :answ
-
+  resources :atasks
   post 'answ_create', to: 'answ#create_answ'
 
   match 'users/:id' => 'users#destroy', :via => :delete, :as => :admin_destroy_user
