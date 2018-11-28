@@ -20,9 +20,12 @@ Rails.application.routes.draw do
 
   get 'administration_tasks', to: 'teacher_admin#tasks'
 
+  match 'user_update_task/:id/:task_id' => 'users#update_task_id', :via => :put, :as => :user_update_task
+
   resources :teacher_admin_controller
   resources :answ
   resources :atasks
+  resources :users
   post 'answ_create', to: 'answ#create_answ'
 
   match 'users/:id' => 'users#destroy', :via => :delete, :as => :admin_destroy_user

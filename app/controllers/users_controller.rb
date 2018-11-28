@@ -5,6 +5,24 @@ class UsersController < ApplicationController
   end
 
 
+  def edit
+    @user = User.find(params[:id])
+  end
+
+  def update_task_id
+    @user = User.find(params[:id])
+    @user.task_id = params[:task_id]
+    if @user.save
+
+    else
+
+   flash[:danger]= "wowowoowwowowowow"
+    end
+  end
+
+
+
+
 
 
  def destroy

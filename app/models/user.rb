@@ -1,3 +1,5 @@
+
+
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
@@ -5,7 +7,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   #validates :task_id, presence: true
-#belongs_to :atasks
+belongs_to :atasks, optional: true
 
 
 

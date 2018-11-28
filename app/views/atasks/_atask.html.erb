@@ -1,11 +1,5 @@
 <li>
 
-  <%= link_to atask.content, edit_atask_path(atask) %>
-
-
-
-    <%= link_to "Edit" %>
-
-
+  <%= link_to "task number: #{atask.id} - #{atask.content} ", edit_atask_path(atask) %>
 
 </li>

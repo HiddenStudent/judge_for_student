@@ -28,6 +28,7 @@ class TeacherAdminController < ApplicationController
 
     #params.require(:id)
     @task = Atask.find(params[:id])
+
   end
 
 
