@@ -8,7 +8,7 @@ class User < ApplicationRecord
 
   #validates :task_id, presence: true
 belongs_to :atasks, optional: true
-has_many :answers
+belongs_to :answers, optional:true
 
 
 end

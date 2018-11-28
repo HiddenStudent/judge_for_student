@@ -25,9 +25,16 @@ class AnswController < ApplicationController
 
   def create_answ
 
-    @answer = Answer.new(content:params[:answ][:content])
+    @test = Answer.find_by_user_id(current_user.id)
 
-    unless @answer.content.blank?
+
+
+
+
+
+   # @answer = Answer.new(content:params[:answ][:content])
+
+    unless params[:answ][:content].blank?
 
 
       res = RestClient.get 'https://api.judge0.com/languages'
@@ -41,15 +48,20 @@ class AnswController < ApplicationController
 
 
       res =  RestClient.post 'https://api.judge0.com/submissions/?base64_encoded=false&wait=false/',
-                    {language_id: '4', source_code: "#{@answer.content}"}
+                    {language_id: '4', source_code: "#{params[:answ][:content]}"}
 
-       @answer.content = res
-      @answer.user_id = current_user.id
-      @answer.task_id = current_user.task_id
+      if @test.nil?
+        @answer = Answer.new(content:res,user_id:current_user.id,task_id:current_user.task_id )
     if @answer.save
-       flash[:success] = "Answer was send and save to data"
+       flash[:success] = "Ur answer was creating"
     end
 
+      else
+        @test.content = res
+        if @test.save
+          flash[:success] = "Answer was updating"
+        end
+        end
       puts "--------------------------------------------------------------------------------------------------------------------------------------------------------------"
 
       puts res
