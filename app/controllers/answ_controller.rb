@@ -44,6 +44,8 @@ class AnswController < ApplicationController
                     {language_id: '4', source_code: "#{@answer.content}"}
 
        @answer.content = res
+      @answer.user_id = current_user.id
+      @answer.task_id = current_user.task_id
     if @answer.save
        flash[:success] = "Answer was send and save to data"
     end

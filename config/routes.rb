@@ -22,6 +22,8 @@ Rails.application.routes.draw do
 
   match 'user_update_task/:id/:task_id' => 'users#update_task_id', :via => :put, :as => :user_update_task
 
+  get 'atasks_show', to: 'atasks#show'
+
   resources :teacher_admin_controller
   resources :answ
   resources :atasks
