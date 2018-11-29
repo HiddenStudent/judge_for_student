@@ -25,57 +25,52 @@ class AnswController < ApplicationController
 
   def create_answ
 
+
+    CreateAnswerJob.set(wait: 5.seconds).perform_later(1)
+
+   # @users = User.where(activated: true).paginate(page: params[:page])
     @test = Answer.find_by_user_id(current_user.id)
 
 
-
-
-
-
-   # @answer = Answer.new(content:params[:answ][:content])
-
     unless params[:answ][:content].blank?
 
-
-      res = RestClient.get 'https://api.judge0.com/languages'
-      puts "--------------------------------------------------------------------------------------------------------------------------------------------------------------"
-      puts res
-      puts "--------------------------------------------------------------------------------------------------------------------------------------------------------------"
-
-
-  #include <stdio.h>\n\nint main(void) {\n  char name[10];\n  scanf(\"%s\", name);\n  printf(\"hello, %s\n\", name);\n  return 0;\n}
-
-
-
-      res =  RestClient.post 'https://api.judge0.com/submissions/?base64_encoded=false&wait=false/',
-                    {language_id: '4', source_code: "#{params[:answ][:content]}"}
+   #   CreateAnswerJob.set(wait: 5.seconds).perform_later(@test,params[:answ][:content])
 
       if @test.nil?
-        @answer = Answer.new(content:res,user_id:current_user.id,task_id:current_user.task_id )
-    if @answer.save
-       flash[:success] = "Ur answer was creating"
-    end
+        @answer = Answer.new(content:params[:answ][:content],user_id:current_user.id,
+                             task_id:current_user.task_id, sending:false )
+
+        if @answer.save
+          flash[:success] = " Ur answer was creating"
+        end
 
       else
-        @test.content = res
+
+        @test.content = params[:answ][:content]
+        @test.sending = false
+
         if @test.save
-          flash[:success] = "Answer was updating"
+          flash[:success] = " Answer was updating"
+          end
         end
-        end
-      puts "--------------------------------------------------------------------------------------------------------------------------------------------------------------"
-
-      puts res
-
-      puts "--------------------------------------------------------------------------------------------------------------------------------------------------------------"
-
-     # end
+     # Answer.delay.create_answ(@test,params[:answ][:content])
 
       redirect_to root_path
-      #debugger
+
     else
       flash[:danger] = 'Field can\'t be blank '
       render 'new'
-      end
     end
-  end
-#end
+    end
+end
+
+
+
+
+
+#  res = RestClient.get 'https://api.judge0.com/languages'
+#  puts "--------------------------------------------------------------------------------------------------------------------------------------------------------------"
+#  puts res
+#  puts "--------------------------------------------------------------------------------------------------------------------------------------------------------------"
+
+#include <stdio.h>\n\nint main(void) {\n  char name[10];\n  scanf(\"%s\", name);\n  printf(\"hello, %s\n\", name);\n  return 0;\n}

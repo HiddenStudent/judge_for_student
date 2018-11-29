@@ -5,9 +5,11 @@ Rails.application.routes.draw do
 
   get 'static_pages/index'
 
-  devise_for :users
+  devise_for :users, controllers: {sessions: 'users/sessions'}
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
+#  get 'users/new_registration', to: 'registrations#new'
 
   root to: "static_pages#home"
 
@@ -29,6 +31,8 @@ Rails.application.routes.draw do
   resources :atasks
   resources :users
   post 'answ_create', to: 'answ#create_answ'
+
+  get 'tasks_progress', to: 'teacher_admin#tasks_progress'
 
   match 'users/:id' => 'users#destroy', :via => :delete, :as => :admin_destroy_user
 

@@ -31,5 +31,9 @@ class TeacherAdminController < ApplicationController
 
   end
 
+  def tasks_progress
+
+  end
+
 
  end

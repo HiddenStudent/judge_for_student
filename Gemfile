@@ -5,13 +5,14 @@ source 'https://rubygems.org'
 gem 'rubocop', '~> 0.60.0', require: false
 
 
+gem 'delayed_job_active_record'
 
 gem 'carrierwave',             '1.2.2'
 gem 'mini_magick',             '4.7.0'
-
+gem 'daemons'
 gem 'rest-client'
 gem 'devise'
-
+gem 'delayed_cron_job'
 
 gem 'rails',        '5.1.6'
 gem 'bcrypt', '3.1.12'
