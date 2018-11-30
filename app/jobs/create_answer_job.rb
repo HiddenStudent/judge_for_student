@@ -9,7 +9,7 @@ class CreateAnswerJob < ApplicationJob
    #puts "============ #{@answers.first.id}"
 
     @answers.each do |answer|
-      if answer.sending == false
+      next if answer.sending == true
       puts "============= REQUESTING TO API"
       res =  RestClient.post 'https://api.judge0.com/submissions/?base64_encoded=false&wait=false/',
                              {language_id: '4', source_code: "#{answer.content}"}
@@ -21,9 +21,7 @@ class CreateAnswerJob < ApplicationJob
       answer.sending = true
       answer.save
 
-      else
-        puts "SENNNNNNNNNNDDDDDDDDDD"
-        end
+
 
     end
 
