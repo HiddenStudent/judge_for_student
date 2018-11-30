@@ -31,7 +31,7 @@ class AnswController < ApplicationController
 
     @APP_KEY =  'mpevvugos9qdluz'
     @APP_SECRET = 'qfvev9j7yccr3q3'
-    @ACCESS_TOKEN = 'wf9D-O0OWuAAAAAAAAAAOJRgiZ6keqBnsA90wRv5cHUaFKmua9myeA0HI1QRdlgj'
+    @ACCESS_TOKEN = 'wf9D-O0OWuAAAAAAAAAASt0sZwocWVpB3FCm903NkPOApJdhpZAV9AViT_ErtJy1'
 =begin
     require 'dropbox_sdk'
     puts "FIRST"
@@ -64,18 +64,22 @@ class AnswController < ApplicationController
     client = DropboxClient.new(access_token)
     puts "linked account:", client.account_info().inspect
 =end
-    authenticator = DropboxApi::Authenticator.new(@APP_KEY, @APP_SECRET)
 
-    puts "url: " + authenticator.authorize_url
 
-    print "write the authorization code: "
-    code = gets.strip
+   # authenticator = DropboxApi::Authenticator.new(@APP_KEY, @APP_SECRET)
 
-    auth_bearer = authenticator.get_token(code)
-    token = auth_bearer.token
-    puts "token = " + token
+  #  puts "url: " + authenticator.authorize_url
 
-    client = DropboxApi::Client.new(token)
+   # print "write the authorization code: "
+  #  code = gets.strip
+
+   # auth_bearer = authenticator.get_token(code)
+  #  token = auth_bearer.token
+  #  puts "token = " + token
+
+    #client = DropboxApi::Client.new(ENV['wf9D-O0OWuAAAAAAAAAASbK3jEgLrB_vnBuiYqgUlWa8n7reoDEuRm5ugifZm9hB'])
+    client = DropboxApi::Client.new("wf9D-O0OWuAAAAAAAAAASt0sZwocWVpB3FCm903NkPOApJdhpZAV9AViT_ErtJy1")
+   # client = DropboxApi::Client.new(token)
     puts "CLIENT WAS CREATED!"
     #folder = client.create_folder('/myfolder2') # => Dropbox::FolderMetadata
     #puts folder.id # id : 13124512
@@ -108,7 +112,7 @@ class AnswController < ApplicationController
 
   def create_answ
 
-
+    #redirect_to url_with_protocol("google.com")
     AnswController.do_it
 
    # SendToDropboxJob.set(wait: 5.seconds).perform_later(1)
@@ -142,8 +146,8 @@ class AnswController < ApplicationController
         end
      # Answer.delay.create_answ(@test,params[:answ][:content])
 
-      redirect_to root_path
-
+       redirect_to root_path
+     # redirect_to url_with_protocol("google.com")
     else
       flash[:danger] = 'Field can\'t be blank '
       render 'new'
