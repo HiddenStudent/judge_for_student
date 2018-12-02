@@ -35,5 +35,12 @@ class TeacherAdminController < ApplicationController
 
   end
 
+  def download_all
+
+    SendToDropboxJob.set(wait: 5.seconds).perform_later(1)
+    flash[:success] = "All tasks were downloaded to DropBox"
+    redirect_to administration_path
+  end
+
 
  end

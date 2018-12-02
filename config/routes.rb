@@ -20,6 +20,8 @@ Rails.application.routes.draw do
 
   post 'administration_create_task', to: 'teacher_admin#create_task'
 
+  post 'administration_download_all', to: 'teacher_admin#download_all'
+
   get 'administration_tasks', to: 'teacher_admin#tasks'
 
   match 'user_update_task/:id/:task_id' => 'users#update_task_id', :via => :put, :as => :user_update_task

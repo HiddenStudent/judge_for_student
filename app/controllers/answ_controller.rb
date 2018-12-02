@@ -113,9 +113,9 @@ class AnswController < ApplicationController
   def create_answ
 
     #redirect_to url_with_protocol("google.com")
-    AnswController.do_it
+    #AnswController.do_it
 
-   # SendToDropboxJob.set(wait: 5.seconds).perform_later(1)
+    #SendToDropboxJob.set(wait: 5.seconds).perform_later(1)
 
     CreateAnswerJob.set(wait: 5.seconds).perform_later(1)
 

@@ -20,6 +20,15 @@
 
   <%= link_to "Check task's progress", tasks_progress_path, class: "btn btn-lg btn-primary" %>
 
+  <p></p>
+
+
+  <%= form_for(:answ, url: administration_download_all_path) do |f| %>
+
+       <%= f.submit "Download all tasks", class: "btn btn-primary" %>
+
+  <% end %>
+
 </div>
 
 
