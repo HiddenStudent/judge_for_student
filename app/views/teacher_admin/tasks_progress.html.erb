@@ -3,7 +3,9 @@
   <h1>
     Progress of students:
   </h1>
+  <%unless @users.first.nil?%>
   <ul>
+
   <% @users.each do |user|%>
       <p >
         <% @answ = @answers.find_by_user_id(user.id) %>
@@ -19,8 +21,11 @@
       <% end %>
 
     <div class="center jumbotron">
+
     <%= link_to "Download all tasks", administration_download_users_path(@users.first), class: "btn btn-primary" %>
     </div>
   </ul>
-
+    <%else%>
+  <h3>No users in this task...</h3>
+<%end%>
 </div>

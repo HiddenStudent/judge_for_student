@@ -40,9 +40,17 @@ class UsersController < ApplicationController
 
   def update_task_id
     @user = User.find(params[:id])
+    #if @user.status == "complete"
     @user.task_id = params[:task_id]
-    if @user.save
+    @user.status = "In process"
+    @answer = Answer.find_by_user_id(@user.id)
 
+    if @user.save
+      unless @answer.nil?
+        @answer.destroy
+        @answer.save
+      end
+    flash.now[:siccess] = "User added to task"
     else
 
    flash[:danger]= "wowowoowwowowowow"
