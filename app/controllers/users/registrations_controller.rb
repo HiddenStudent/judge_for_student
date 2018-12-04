@@ -7,6 +7,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   #skip_before_action :authenticate_member!
   # GET /resource/sign_up
    def new
+
      #before_action :authenticate_admin!
      #skip_before_action :authenticate_member!
    end

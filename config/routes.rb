@@ -6,6 +6,9 @@ Rails.application.routes.draw do
 
   resources :email_notify, only: [:edit]        #email
 
+ # match 'activation_user/:id'=> 'activation#edit', :via => :get, :as => :activation_user
+
+  resources :activation, only: [:edit]
 
   get 'new_users', to: 'users#new'
 

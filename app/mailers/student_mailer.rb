@@ -16,15 +16,17 @@ class StudentMailer < ApplicationMailer
   #
   #   en.student_mailer.account_activation.subject
   #
-  def account_activation
-    @greeting = "Hi"
-
-    mail to: "to@example.org"
-  end
 
   def new_task_notify(user)
     @user = user
 
     mail to: user.email, subject: "Information about task"
   end
+
+  def activation(user)
+    @user = user
+
+    mail to: user.email, subject: "Test"
+  end
+
 end

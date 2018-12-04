@@ -1,0 +1,5 @@
+Welcome!
+You can confirm your account email through the link below:
+
+<%= link_to 'Confirm my account', edit_activation_url(@user.activation_digest,
+                                                      email:@user.email) %>

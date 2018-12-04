@@ -7,8 +7,8 @@ class StudentMailerPreview < ActionMailer::Preview
   end
 
   # Preview this email at http://localhost:3000/rails/mailers/student_mailer/account_activation
-  def account_activation
-    StudentMailer.account_activation
+  def activation
+    StudentMailer.activation
   end
 
 end

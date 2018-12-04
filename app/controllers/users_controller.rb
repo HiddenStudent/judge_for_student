@@ -95,10 +95,12 @@ end
     if current_user.teacher == true
 
     @user = User.new(user_params)
+    token = @user.new_token
+    @user.activation_digest = token
     if @user.save
-
+      StudentMailer.activation(@user).deliver_now
       #UserMailer.account_activation(@user).deliver_now
-      flash[:info] = "Please check your email to activate your account."
+      flash[:info] = "Email for user was sent."
       redirect_to administration_path
     else
       render 'new'
@@ -112,6 +114,7 @@ end
     params.require(:user).permit(:email, :password,
                                  :password_confirmation)
   end
+
 
 
 end

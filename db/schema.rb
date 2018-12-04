@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181203111356) do
+ActiveRecord::Schema.define(version: 20181204153812) do
 
   create_table "answers", force: :cascade do |t|
     t.text "content"
@@ -55,6 +55,8 @@ ActiveRecord::Schema.define(version: 20181203111356) do
     t.datetime "updated_at", null: false
     t.integer "task_id", default: 0
     t.string "status", default: "in process"
+    t.string "activation_digest"
+    t.boolean "activated", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

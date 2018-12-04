@@ -10,13 +10,13 @@ class User < ApplicationRecord
 belongs_to :atasks, optional: true
 belongs_to :answers, optional:true
 
-  def authenticated?(user)
-    if user.teacher = true
-      return true
-    else
-      return false
-    end
 
+  def activate
 
+    update_columns(activated: true)
+  end
+
+  def new_token
+    SecureRandom.urlsafe_base64
   end
 end
