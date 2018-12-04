@@ -3,7 +3,7 @@ class SendToDropboxJob < ApplicationJob
 
 
 
-  def perform(a)
+  def perform(id)
 
     puts "-------------------------|||||||||||-----------------------------------"
 
@@ -69,20 +69,16 @@ class SendToDropboxJob < ApplicationJob
     #result = client.list_folder "/sample_folder"
     #result.entries
     # result.has_more?
-    #
-    file = client.upload('/myfolder/file2.txt', 'file body') # => Dropbox::FileMetadata
+    @user = User.find_by_id(id)
+    @answer = Answer.find_by_user_id(id)
+    file = client.upload("/#{@user.email.split('@').first}/task#{@user.task_id}_#{@user.updated_at}.txt", "#{@answer.content}") # => Dropbox::FileMetadata
     puts file.size # => 9
     puts file.rev # => a1c10ce0dd78
     puts "FILE WAS UPLOADED!"
 
 
     puts "------------------------------------------------------------"
-    #  @session = DropboxSession.new(@APP_KEY,@APP_SECRET)
-    # @client = DropboxClient.new(@session,)
 
-
-    # App key = 5y63yn7q0asdsb5
-    # App secret = yxieb3fct08yh9o
 
   end
 end

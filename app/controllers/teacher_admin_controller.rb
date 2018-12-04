@@ -21,7 +21,9 @@ class TeacherAdminController < ApplicationController
   end
 
   def tasks
-  @tasks = Atask.all
+    @tasks = Atask.all
+    @answers = Answer.where(sending: true)
+
   end
 
   def edit
@@ -32,15 +34,32 @@ class TeacherAdminController < ApplicationController
   end
 
   def tasks_progress
+    @users = User.where(task_id: params[:task_id])
+    @answers = Answer.where(task_id: params[:task_id])
+  end
 
+  def download_user
+
+    SendToDropboxJob.set(wait: 5.seconds).perform_later(params[:id])
+    flash[:success] = "All tasks were downloaded to DropBox, id: #{params[:id]}"
+    redirect_to administration_path
   end
 
   def download_all
 
-    SendToDropboxJob.set(wait: 5.seconds).perform_later(1)
-    flash[:success] = "All tasks were downloaded to DropBox"
+    SendToDropboxAllJob.set(wait: 5.seconds).perform_later(User.find_by_id(params[:id]).task_id)
+   flash[:success] = "task id = #{User.find_by_id(params[:id]).task_id}"
     redirect_to administration_path
   end
 
+  def check_answ
+  @answer = Answer.find_by_user_id(params[:id])
+  @text = RestClient.get  "https://api.judge0.com/submissions/#{@answer.content}?
+  base64_encoded=false&fields=stdout,stderr,status_id,language_id,time,compile_output"
+   # SendToDropboxJob.set(wait: 0.seconds).perform_later(params[:id])
+
+  @user = User.find_by_id(params[:id])
+  #flash[:success] = col
+  end
 
  end

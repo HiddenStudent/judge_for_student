@@ -5,8 +5,37 @@ class UsersController < ApplicationController
   end
 
 
-  def edit
-    @user = User.find(params[:id])
+  def edit_complete
+  @user = User.find_by_id(params[:id])
+  @answer = Answer.find_by_user_id(params[:id])
+
+  @user.status = "complete"
+    #@user.save
+  if @user.save
+    flash[:success] = "Success, user: #{@user.email}"
+    redirect_to administration_path
+    else
+      flash[:danger] = "something went wrong"
+      redirect_to administration_path
+    end
+  end
+
+  def edit_rework
+    @user = User.find_by_id(params[:id])
+    @answer = Answer.find_by_user_id(params[:id])
+
+    @user.status = "rework"
+    @answer.sending = false
+    @answer.content = nil
+    @answer.save
+    @user.save
+
+        flash[:success] = "Success, user: #{@user.email}, answer: #{@answer.id}, #{@answer.sending} params: #{params[:id]}"
+    redirect_to administration_path
+ # else
+   # flash[:danger] = "something went wrong"
+   # redirect_to administration_path
+  #end
   end
 
   def update_task_id

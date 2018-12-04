@@ -4,16 +4,27 @@
 <div class="center jumbotron">
 
   <% unless current_user.task_id == 0 %>
-<h1> My task in process: </h1>
+<h1> My task : </h1>
 
 <% @task = Atask.find(current_user.task_id) %>
 
 <h3>{
   <%= @task.content %>}
+
 </h3>
 
+    <% if current_user.status == "complete" %>
+      <h3 style="color:#008000">[<%= current_user.status %>]</h3>
+      <%else%>
+      <h3 style="color:#ff0000">[<%= current_user.status %>]</h3>
+      <%end%>
+
+    <% unless current_user.status == "complete" %>
 
 <%= link_to "Send my answer", new_answ_path , class: "btn btn-lg btn-primary" %>
+      <% else %>
+      <h3>Ur task is done...</h3>
+      <% end %>
     <% else %>
   <h3>U have no any tasks...</h3>
   <%end%>

@@ -1,0 +1,29 @@
+<% provide(:title,"Home") %>
+  <title> <%= full_title(yield(:title)) %> </title>
+<div class="left jumbotron">
+    <h1> Student's answer: </h1>
+  <div class="center jumbotron">
+  <% if @user.status == "complete" %>
+    <h3 style="color:#008000">[<%= @user.status %>]</h3>
+  <% else %>
+    <h3 style="color:#ff0000">[<%= @user.status %>]</h3>
+  <% end %>
+  </div>
+  <p>
+    <%= @text %>
+  </p>
+  <div class="center jumbotron">
+
+
+<h4>
+  <%unless @user.status == "complete" %>
+  <%= link_to "complete ", users_complete_path(@user), class: "btn btn-lg btn-primary" %>
+  <%= link_to "rework ", users_rework_path(@user), class: "btn btn-lg btn-primary" %>
+    <% else %>
+    <%= link_to "Download this task", administration_download_user_path, class: "btn btn-primary" %>
+  <%end%>
+</h4>
+
+  </div>
+
+</div>

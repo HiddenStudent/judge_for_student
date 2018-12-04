@@ -132,6 +132,8 @@ class AnswController < ApplicationController
                              task_id:current_user.task_id, sending:false )
 
         if @answer.save
+          current_user.status = "In process"
+          current_user.save
           flash[:success] = " Ur answer was creating"
         end
 
@@ -141,6 +143,8 @@ class AnswController < ApplicationController
         @test.sending = false
 
         if @test.save
+          current_user.status = "In process"
+          current_user.save
           flash[:success] = " Answer was updating"
           end
         end

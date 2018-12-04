@@ -20,11 +20,21 @@ Rails.application.routes.draw do
 
   post 'administration_create_task', to: 'teacher_admin#create_task'
 
-  post 'administration_download_all', to: 'teacher_admin#download_all'
+  get 'administration_download_user/:id' => 'teacher_admin#download_user', :via => :get, :as => :administration_download_user
+
+  get 'administration_download_users/:id' => 'teacher_admin#download_all', :via => :get, :as => :administration_download_users
+
 
   get 'administration_tasks', to: 'teacher_admin#tasks'
 
+  match 'users_complete/:id' => 'users#edit_complete' , :via => :get, :as => :users_complete
+  match 'users_rework/:id' => 'users#edit_rework' , :via => :get, :as => :users_rework
+
   match 'user_update_task/:id/:task_id' => 'users#update_task_id', :via => :put, :as => :user_update_task
+
+  match 'user_progress/:task_id' => 'teacher_admin#tasks_progress', :via => :get, :as => :user_progress
+
+  match 'check_answ/:id' => 'teacher_admin#check_answ', :via => :get, :as => :check_answ
 
   get 'atasks_show', to: 'atasks#show'
 

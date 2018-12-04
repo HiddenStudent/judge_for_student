@@ -1,8 +1,26 @@
 <div class="left jumbotron">
 
   <h1>
-    It's future tasks progress page
+    Progress of students:
   </h1>
+  <ul>
+  <% @users.each do |user|%>
+      <p >
+        <% @answ = @answers.find_by_user_id(user.id) %>
 
+        <%= user.email.split('@').first %>
+        <% if @answ.nil? || @answ.sending == false  %>
+          [not sent]
+          <%else%>
+      <%= link_to "[sent]", check_answ_path(user) %>
+          <%end%>
+      </p>
+
+      <% end %>
+
+    <div class="center jumbotron">
+    <%= link_to "Download all tasks", administration_download_users_path(@users.first), class: "btn btn-primary" %>
+    </div>
+  </ul>
 
 </div>

@@ -1,5 +1,10 @@
-
-
-  <%= link_to "task number: #{atask.id} - #{atask.content} ", edit_atask_path(atask) , class: "btn btn-lg btn-primary" %>
+<% @users_all = User.where(task_id: atask.id) %>
+<% @users_sent = @answers.where(task_id: atask.id) %>
 <p>
+
+<%= link_to "task number: #{atask.id} - #{atask.content} ", edit_atask_path(atask) , class: "btn btn-lg btn-primary" %>
+
+ <%= link_to "[ #{@users_sent.count} /  #{@users_all.count} ]",    user_progress_path(atask)   %>
+
+
 </p>

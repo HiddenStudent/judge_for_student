@@ -19,8 +19,11 @@
 
       <%= f.label :content %>
       <%= f.text_area :content, class: 'form-control' ,placeholder: "Compose new answer..." %>
-
+          <% unless current_user.status == "complete" %>
       <%= f.submit "Create", class: "btn btn-primary" %>
+          <% else %>
+            <h3 style="color:#008000" >Ur task is done...</h3>
+          <% end %>
 
     <% end %>
 
