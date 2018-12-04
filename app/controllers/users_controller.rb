@@ -12,7 +12,9 @@ class UsersController < ApplicationController
   @user.status = "complete"
     #@user.save
   if @user.save
-    flash[:success] = "Success, user: #{@user.email}"
+    StudentMailer.info_status(@user).deliver_now
+
+    flash[:success] = "Email about changes was sent to student"
     redirect_to administration_path
     else
       flash[:danger] = "something went wrong"
@@ -30,7 +32,10 @@ class UsersController < ApplicationController
     @answer.save
     @user.save
 
-        flash[:success] = "Success, user: #{@user.email}, answer: #{@answer.id}, #{@answer.sending} params: #{params[:id]}"
+    StudentMailer.info_status(@user).deliver_now
+
+
+        flash[:success] = "Email about changes was sent to student."
     redirect_to administration_path
  # else
    # flash[:danger] = "something went wrong"
@@ -42,6 +47,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     #if @user.status == "complete"
     @user.task_id = params[:task_id]
+    StudentMailer.new_task_notify(@user).deliver_now
     @user.status = "In process"
     @answer = Answer.find_by_user_id(@user.id)
 
@@ -50,7 +56,7 @@ class UsersController < ApplicationController
         @answer.destroy
         @answer.save
       end
-    flash.now[:siccess] = "User added to task"
+
     else
 
    flash[:danger]= "wowowoowwowowowow"

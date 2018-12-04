@@ -1,4 +1,15 @@
 Rails.application.routes.draw do
+
+
+
+
+
+  resources :email_notify, only: [:edit]        #email
+
+
+
+
+
   get 'atasks/new'
 
   get 'atasks/edit'

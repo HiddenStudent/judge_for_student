@@ -1,5 +1,5 @@
 <div class="left jumbotron">
-<h3><%= current_user.email %></h3>
+<h3><%= current_user.email.split('@').first %></h3>
 <p>    </p>
 <p>
   <span><%= link_to "view my tasks", atasks_show_path ,class: "btn btn-lg btn-primary" %></span>

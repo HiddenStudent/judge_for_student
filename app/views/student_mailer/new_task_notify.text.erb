@@ -1,0 +1,23 @@
+
+
+Hi <%= @user.email.split('@').first %>,
+
+
+  We want to notify you about the change of ur task:
+
+
+
+  <%if @user.status == "complete" %>
+    Ur task was complete. U did a good job! [<%= @user.status %>]
+
+
+      Now u have a new task...see details on ur <%= link_to "home page", root_url %>
+
+  <% else %>
+
+      U didn't cope with task!
+
+
+      Now u have a new task...see details on ur <%= link_to "home page", root_url %>
+
+  <%end%>

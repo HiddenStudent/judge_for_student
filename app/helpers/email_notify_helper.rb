@@ -1,0 +1,2 @@
+module EmailNotifyHelper
+end
