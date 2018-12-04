@@ -10,5 +10,13 @@ class User < ApplicationRecord
 belongs_to :atasks, optional: true
 belongs_to :answers, optional:true
 
+  def authenticated?(user)
+    if user.teacher = true
+      return true
+    else
+      return false
+    end
 
+
+  end
 end

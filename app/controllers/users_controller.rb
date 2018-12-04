@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  # before_action :configure_account_update_params, only: [:update]
 
   def index
     @users = User.all
@@ -63,20 +64,54 @@ class UsersController < ApplicationController
     end
   end
 
+  def destroy
+    User.find(params[:id]).destroy
+    flash[:success] = "User deleted"
+    # if ($checker == true)
 
-
-
-
-
- def destroy
-  User.find(params[:id]).destroy
-  flash[:success] = "User deleted"
-  # if ($checker == true)
-
-  redirect_to index_user_path
-  #   else
-
-  # redirect_to followers_user_path(@user.find(session[:user_id]))
-  #  end
+    redirect_to index_user_path
   end
+
+
+
+
+
+  def new
+    unless current_user.nil?
+    if current_user.teacher == true
+    @user = User.new
+    else
+      flash[:success] = "No permissions"
+      redirect_to root_path
+    end
+    else
+      flash[:success] = "No permissions"
+      redirect_to root_path
+end
+  end
+
+
+  def create
+    if current_user.teacher == true
+
+    @user = User.new(user_params)
+    if @user.save
+
+      #UserMailer.account_activation(@user).deliver_now
+      flash[:info] = "Please check your email to activate your account."
+      redirect_to administration_path
+    else
+      render 'new'
+    end
+    end
+  end
+
+
+  private
+  def user_params
+    params.require(:user).permit(:email, :password,
+                                 :password_confirmation)
+  end
+
+
 end

@@ -7,8 +7,9 @@ Rails.application.routes.draw do
   resources :email_notify, only: [:edit]        #email
 
 
+  get 'new_users', to: 'users#new'
 
-
+  post 'user_signup', to: 'users#create'
 
   get 'atasks/new'
 
@@ -22,7 +23,7 @@ Rails.application.routes.draw do
 
 #  get 'users/new_registration', to: 'registrations#new'
 
-  root to: "static_pages#home"
+  root to: 'static_pages#home'
 
 
   get 'administration', to: 'teacher_admin#index'
