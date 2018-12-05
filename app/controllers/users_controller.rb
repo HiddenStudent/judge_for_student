@@ -10,10 +10,12 @@ class UsersController < ApplicationController
 
 
   def edit_feedback
+    params[:feedback][:content] = "no comment" if params[:feedback][:content].blank?
+
    if params[:rework] == 'rework'
      redirect_to  users_rework_path(params[:id],params[:feedback][:content])
    elsif params[:complete] == 'complete'
-     rredirect_to  users_complete_path(params[:id],params[:feedback][:content])
+     redirect_to  users_complete_path(params[:id],params[:feedback][:content])
    else
      redirect_to administration_path
    end
@@ -47,6 +49,7 @@ class UsersController < ApplicationController
     @user.status = "rework"
     @answer.sending = false
     @answer.content = nil
+    @answer.final = false
     @answer.save
     @user.save
 

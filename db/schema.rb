@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181204153812) do
+ActiveRecord::Schema.define(version: 20181205152213) do
 
   create_table "answers", force: :cascade do |t|
     t.text "content"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20181204153812) do
     t.integer "user_id"
     t.integer "task_id"
     t.boolean "sending", default: false
+    t.boolean "final", default: false
   end
 
   create_table "atasks", force: :cascade do |t|
