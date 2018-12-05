@@ -6,6 +6,23 @@ class UsersController < ApplicationController
   end
 
 
+
+
+
+  def edit_feedback
+   if params[:rework] == 'rework'
+     redirect_to  users_rework_path(params[:id],params[:feedback][:content])
+   elsif params[:complete] == 'complete'
+     rredirect_to  users_complete_path(params[:id],params[:feedback][:content])
+   else
+     redirect_to administration_path
+   end
+
+  end
+
+
+
+
   def edit_complete
   @user = User.find_by_id(params[:id])
   @answer = Answer.find_by_user_id(params[:id])
@@ -13,7 +30,7 @@ class UsersController < ApplicationController
   @user.status = "complete"
     #@user.save
   if @user.save
-    StudentMailer.info_status(@user).deliver_now
+    StudentMailer.info_status(@user,params[:text]).deliver_now
 
     flash[:success] = "Email about changes was sent to student"
     redirect_to administration_path
@@ -33,7 +50,7 @@ class UsersController < ApplicationController
     @answer.save
     @user.save
 
-    StudentMailer.info_status(@user).deliver_now
+    StudentMailer.info_status(@user,params[:text]).deliver_now
 
 
         flash[:success] = "Email about changes was sent to student."

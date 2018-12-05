@@ -42,8 +42,10 @@ Rails.application.routes.draw do
 
   get 'administration_tasks', to: 'teacher_admin#tasks'
 
-  match 'users_complete/:id' => 'users#edit_complete' , :via => :get, :as => :users_complete
-  match 'users_rework/:id' => 'users#edit_rework' , :via => :get, :as => :users_rework
+  match 'users_complete/:id/:text' => 'users#edit_complete' , :via => :get, :as => :users_complete
+  match 'users_rework/:id/:text' => 'users#edit_rework' , :via => :get, :as => :users_rework
+
+  match 'users_feedback/:id' => 'users#edit_feedback' , :via => :post, :as => :users_feedback
 
   match 'user_update_task/:id/:task_id' => 'users#update_task_id', :via => :put, :as => :user_update_task
 

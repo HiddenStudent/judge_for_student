@@ -18,8 +18,22 @@
 <h4>
   <%unless @user.status == "complete" %>
 
-  <%= link_to "complete ", users_complete_path(@user), class: "btn btn-lg btn-primary" %>
-  <%= link_to "rework ", users_rework_path(@user), class: "btn btn-lg btn-primary" %>
+
+    <%= form_for(:feedback, url: users_feedback_path(@user)) do |f| %>
+
+
+      <%= f.label :content %>
+      <%= f.text_area :content, class: 'form-control', placeholder: "Compose the feedback..." %>
+
+
+
+      <%= f.submit "complete", name: 'complete', class: "btn btn-primary" %>
+<p>                 </p>
+      <%= f.submit "rework", name: 'rework', class: "btn btn-primary" %>
+
+
+    <% end %>
+
 
     <% else %>
 
