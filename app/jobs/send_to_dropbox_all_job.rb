@@ -11,11 +11,86 @@ class SendToDropboxAllJob < ApplicationJob
 
 
     client = DropboxApi::Client.new("wf9D-O0OWuAAAAAAAAAASt0sZwocWVpB3FCm903NkPOApJdhpZAV9AViT_ErtJy1")
+
+    answers = Answer.where(task_id: task_id)
+
+
+
+   # @answers.each do |answer|
+   # if User.find_by_id(answer.user_id).status == "complete"
+   #   puts "nil?   #{answer.nil?}, answer.id  #{answer.id},status = #{User.find_by_id(answer.user_id).status }"
+
+
+   #   file = client.upload("/task#{task_id}/user_id_#{answer.user_id}.txt", "#{answer.content}") # => Dropbox::FileMetadata
+
+
+      arr = []
+      puts "-------------I trying write to FILE"
+
+    answers.each do |answer|
+      if User.find_by_id(answer.user_id).status == "complete"
+        puts "nil?   #{answer.nil?}, answer.id  #{answer.id},status = #{User.find_by_id(answer.user_id).status }"
+        file = "task#{task_id}_user_id#{answer.user_id}.text"
+        filepath = "stuff_to_zip/#{file}"
+        File.new(filepath, "w")
+        arr += [file]
+        print arr
+
+        File.open(filepath, "w+") do |f|
+          f.write(answer.content)
+        end
+      end
+      puts
+
+     end
+
+    #File.new("home/developer/stuff_to_zip/test_list.text", "w")
+    #path = "home/developer/stuff_to_zip/test_list.text"
+    #content = "data from the form"
+    #File.open(path, "w+") do |f|
+    # f.write(content)
+
+    puts "-------------I trying write to FILE"
+
+
+
+    puts "-------------I trying create ZIP"
+
+    require 'rubygems'
+    require 'zip'
+
+    folder = "/home/developer/rails_project/student_app/stuff_to_zip"
+    puts "1"
+    input_filenames = arr
+puts "2"
+    zipfile_name = "/home/developer/rails_project/student_app/archives/archive_task#{task_id}_#{Random.new.rand(100)}.zip"
+puts"3"
+    Zip::File.open(zipfile_name, Zip::File::CREATE) do |zipfile|
+      puts "4"
+      input_filenames.each do |filename|
+puts "5"
+        zipfile.add(filename, File.join(folder, filename))
+        puts "6"
+      end
+      puts "7"
+      zipfile.get_output_stream("myFile") { |f| f.write "myFile contains just this" }
+      puts "8"
+    end
+
+    puts "-------------I tried create ZIP"
+
+    File.open(zipfile_name) do |f|
+      puts "eboy"
+      client.upload_by_chunks "/task#{task_id}_{Random.new.rand(100)}", f
+      puts "nooo"
+    end
+
+
     puts "CLIENT WAS CREATED!"
 
     puts "OK , LETS UPLOAD A FILE..."
+=begin
 
-    @answers = Answer.where(task_id: task_id)
     puts "OK1"
     @answers.each do |answer|
       puts "OK2"
@@ -35,6 +110,8 @@ class SendToDropboxAllJob < ApplicationJob
        next
        end
     end
+=end
+
 
     puts "------------------------------------------------------------"
 

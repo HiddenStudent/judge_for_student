@@ -396,6 +396,7 @@ GEM
       unicode-display_width (~> 1.4.0)
     ruby-progressbar (1.10.0)
     ruby_dep (1.5.0)
+    rubyzip (1.2.2)
     sass (3.7.2)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
@@ -482,6 +483,7 @@ DEPENDENCIES
   rails-controller-testing (= 1.0.2)
   rest-client
   rubocop (~> 0.60.0)
+  rubyzip
   sass-rails (= 5.0.6)
   spring (= 2.0.2)
   spring-watcher-listen (= 2.0.1)

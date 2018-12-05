@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 
 gem 'rubocop', '~> 0.60.0', require: false
 
-
+gem 'rubyzip'
 gem 'delayed_job_active_record'
 gem 'dropbox_api'
 gem 'dropbox-sdk'
