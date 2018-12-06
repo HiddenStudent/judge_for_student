@@ -1,0 +1,2 @@
+class GroupInfo < ApplicationRecord
+end

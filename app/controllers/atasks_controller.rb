@@ -4,6 +4,7 @@ class AtasksController < ApplicationController
 
   def edit
     @task = Atask.find(params[:id])
+    @users = User.where(task_id:  @task.id)
   end
 
   def update

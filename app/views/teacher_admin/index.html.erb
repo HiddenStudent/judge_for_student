@@ -2,24 +2,26 @@
 
 <h1>Administration panel</h1>
 
-<%= link_to "Tasks", administration_tasks_path , class: "btn btn-lg btn-primary" %>
+  <%if current_user.teacher && current_user.group_id ==0%>
+
+    <%= link_to "Create new group", new_group_path , class: "btn btn-lg btn-primary" %>
+  <%else%>
+    <%= link_to "Group", new_group_path , class: "btn btn-lg btn-primary" %>
+  <%end%>
 
 <p></p>
 
+<%= link_to "Tasks", administration_tasks_path , class: "btn btn-lg btn-primary" %>
+
+<p></p>
 
 <%= link_to "Add new task", administration_new_path , class: "btn btn-lg btn-primary" %>
 
   <p></p>
 
-
 <%= link_to "Create new student", new_users_path , class: "btn btn-lg btn-primary" %>
 
-
-  <p></p>
-
-
-
-
+<p></p>
 
 </div>
 

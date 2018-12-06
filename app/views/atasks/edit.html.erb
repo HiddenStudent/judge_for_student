@@ -17,7 +17,9 @@
 
 
       <ul class="teacher_admin">
-        <%= render @users %>
+        <%@users.each do |user|%>
+        <%= render user %>
+          <%end%>
       </ul>
       <%= f.submit "Save changes", class: "btn btn-primary" %>
     <% end %>

@@ -59,6 +59,8 @@ Rails.application.routes.draw do
   resources :answ
   resources :atasks
   resources :users
+  resources :groups
+
   post 'answ_create', to: 'answ#create_answ'
 
   get 'tasks_progress', to: 'teacher_admin#tasks_progress'
