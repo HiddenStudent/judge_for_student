@@ -128,6 +128,17 @@ end
     end
   end
 
+  def update
+    unless  params[:picture].nil?
+    @user = current_user.update user_avatar
+    #if @user.save
+      flash[:success] = "Avatar was uploaded!"
+      redirect_to root_path
+    else
+      flash[:danger] = "Please choose the file..."
+      redirect_to root_path
+    end
+  end
 
   private
   def user_params
@@ -135,6 +146,11 @@ end
                                  :password_confirmation)
   end
 
+
+  private
+  def user_avatar
+    params.require(:user).permit(:picture)
+  end
 
 
 end

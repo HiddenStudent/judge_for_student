@@ -1,10 +1,31 @@
 <div class="left jumbotron">
-<h3><%= current_user.email.split('@').first %></h3>
-<p>    </p>
-<p>
-  <span><%= link_to "view my tasks", atasks_show_path ,class: "btn btn-lg btn-primary" %></span>
-</p>
-<p>
 
-</p>
+
+
+
+<h3><%= current_user.email.split('@').first %></h3>
+
+<p></p>
+
+  <%= image_tag current_user.picture.url if current_user.picture? %>
+
+<p></p>
+
+  <%= form_for(@user) do |f| %>
+    <%= render 'shared/error_messages', object: f.object %>
+<span class="picture">
+      <%= f.file_field :picture %>
+</span>
+
+   <%= f.submit "Upload avatar", class: "btn btn-lg btn-primary" %>
+
+  <% end %>
+
+<p></p>
+
+  <p><span><%= link_to "view my tasks", atasks_show_path ,class: "btn btn-lg btn-primary" %></span></p>
+
+
+<p></p>
+
 </div>

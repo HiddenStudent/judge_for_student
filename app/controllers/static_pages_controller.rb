@@ -2,7 +2,7 @@ class StaticPagesController < ApplicationController
 
   def home
     #render html: "it's home page"
-
+    @user = current_user
   end
 
 
