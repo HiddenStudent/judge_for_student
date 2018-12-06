@@ -54,8 +54,10 @@ class TeacherAdminController < ApplicationController
 
   def check_answ
   @answer = Answer.find_by_user_id(params[:id])
-  @text = RestClient.get  "https://api.judge0.com/submissions/#{@answer.content}?
+  text = RestClient.get  "https://api.judge0.com/submissions/#{@answer.content}?
   base64_encoded=false&fields=stdout,stderr,status_id,language_id,time,compile_output"
+
+  @text = text.split(',')
    # SendToDropboxJob.set(wait: 0.seconds).perform_later(params[:id])
 
   @user = User.find_by_id(params[:id])

@@ -22,6 +22,8 @@
     <% unless current_user.status == "complete" %>
 
 <%= link_to "Send my answer", new_answ_path , class: "btn btn-lg btn-primary" %>
+
+
       <% else %>
       <h3>Ur task is done...</h3>
       <% end %>

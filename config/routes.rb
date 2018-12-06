@@ -2,13 +2,13 @@ Rails.application.routes.draw do
 
 
 
-
-
   resources :email_notify, only: [:edit]        #email
 
  # match 'activation_user/:id'=> 'activation#edit', :via => :get, :as => :activation_user
 
   resources :activation, only: [:edit]
+
+  match 'answ_report/:test' => 'answ#show_report', :via => :get, :as => :answ_report
 
   get 'new_users', to: 'users#new'
 

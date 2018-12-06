@@ -15,9 +15,12 @@
       <h3 style="color:#ff0000">[<%= "not final" %>]</h3>
     <% end %>
   </div>
-  <p>
-    <%= @text %>
-  </p>
+
+  <%@text.each do |text|%>
+    <p><%=text%></p>
+    <%break if text == "compile_output"%>
+  <%end%>
+
   <div class="center jumbotron">
 
 

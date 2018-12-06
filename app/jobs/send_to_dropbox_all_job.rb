@@ -37,7 +37,9 @@ class SendToDropboxAllJob < ApplicationJob
         print arr
 
         File.open(filepath, "w+") do |f|
-          f.write(answer.content)
+          text = RestClient.get  "https://api.judge0.com/submissions/#{answer.content}?
+  base64_encoded=false&fields=stdout,stderr,status_id,language_id,time,compile_output"
+          f.write(text)
         end
       end
       puts

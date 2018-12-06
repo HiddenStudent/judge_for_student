@@ -1,5 +1,6 @@
 class AnswController < ApplicationController
   def new
+
     test = Answer.find_by_user_id(current_user.id)
     unless test.nil?
       @final = test.final
@@ -7,6 +8,7 @@ class AnswController < ApplicationController
       @final = false
     end
   end
+
 
   def edit
 
@@ -28,6 +30,28 @@ class AnswController < ApplicationController
 
   end
 
+  def show_report
+
+    testt = params[:test]
+
+    @code = testt
+
+      res =  RestClient.post 'https://api.judge0.com/submissions/?base64_encoded=false&wait=false/',
+                             {language_id: '4', source_code: "#{testt}"}
+      res = JSON.parse(res)    #  Parsing JSON file
+
+      res = res["token"]
+
+      text = RestClient.get  "https://api.judge0.com/submissions/#{res}?
+  base64_encoded=false&fields=stdout,stderr,status_id,language_id,time,compile_output"
+
+     @text = text.split(',')
+
+
+    end
+
+
+
 
 
 
@@ -41,6 +65,8 @@ class AnswController < ApplicationController
 
   def create_answ
 
+
+
     #redirect_to url_with_protocol("google.com")
     #AnswController.do_it
 
@@ -51,6 +77,8 @@ class AnswController < ApplicationController
 
 
     unless params[:answ][:content].blank?
+
+      if params[:create] == 'create'
 
    #   CreateAnswerJob.set(wait: 5.seconds).perform_later(@test,params[:answ][:content])
 
@@ -88,10 +116,24 @@ class AnswController < ApplicationController
 
        redirect_to root_path
      # redirect_to url_with_protocol("google.com")
+
+
+      else
+       redirect_to answ_report_path(params[:answ][:content])
+
+      end
+
     else
       flash[:danger] = 'Field can\'t be blank '
       render 'new'
+
+
     end
+
+
+
+
+
     end
 end
 

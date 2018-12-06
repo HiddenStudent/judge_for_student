@@ -1,1 +1,1 @@
-30bdd191-e0b0-4184-8649-3133b8073799
+{"language_id":4,"stdout":null,"status_id":6,"time":null,"stderr":null,"compile_output":"main.c:1:1: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ at end of input\n qweqwewqeqweqw\n ^~~~~~~~~~~~~~\n"}
