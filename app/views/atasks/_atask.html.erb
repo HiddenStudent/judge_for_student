@@ -1,6 +1,12 @@
-  <% #@users_all = User.where(task_id: atask.id) %>
-  <% #@users_sent = @answers.where(task_id: atask.id) %>
   <p>
-  <%= link_to "Task: #{atask.name} ", edit_atask_path(atask) , class: "btn btn-lg btn-primary" %>
-  <%# link_to "[ #{@users_sent.count} /  #{@users_all.count} ]",    user_progress_path(atask)   %>
+    <%if current_user.teacher?%>
+      <%= link_to "Task: #{atask.name} ", edit_atask_path(atask) , class: "btn btn-lg btn-primary" %>
+      <% @users_all = StudentsAnswer.where(task_id: atask.id) %>
+      <% @users_sent = Answer.where(task_id: atask.id, sending: true) %>
+      <%=link_to "[ #{@users_sent.count} /  #{@users_all.count} ]",    answ_path(atask)   %>
+    <%else%>
+      <%= link_to "Task: #{atask.name} ", atask_path(atask.id) , class: "btn btn-lg btn-primary" %>
+      <%=TasksGroup.find_by_group_id(params[:id]).atask_id%>
+      <%=atask.id%>
+    <%end%>
   </p>

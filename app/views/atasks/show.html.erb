@@ -3,7 +3,6 @@
   <div class="center jumbotron">
     <% unless current_user.task_id == 0 %>
       <h1> My task : </h1>
-      <%@task = Atask.find(current_user.task_id) %>
       <h3>{<%= @task.content %>}</h3>
       <%if current_user.status == "complete" %>
         <h3 style="color:#008000">[<%= current_user.status %>]</h3>

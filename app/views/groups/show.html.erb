@@ -3,8 +3,10 @@
    <h1>All tasks</h1>
    <ul class="teacher_admin">
      <%=render @tasks %>
-     <div class="center jumbotron">
-       <%=link_to "Add new task", new_atask_path(params[:id]), class: "btn btn-lg btn-primary" %>
-     </div>
+     <%if current_user.teacher?%>
+       <div class="center jumbotron">
+         <%=link_to "Add new task", new_atask_path(params[:id]), class: "btn btn-lg btn-primary" %>
+       </div>
+     <%end%>
    </ul>
  </div>

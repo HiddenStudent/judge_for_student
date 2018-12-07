@@ -33,7 +33,7 @@ class AtasksController < ApplicationController
   end
 
   def show
-
+    @task = Atask.find(params[:id])
   end
 
 

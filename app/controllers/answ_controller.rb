@@ -18,7 +18,17 @@ class AnswController < ApplicationController
   end
 
   def show
-
+    @users = []
+    ids = StudentsAnswer.where(task_id: params[:id])
+    users = User.all
+    ids.each do |i|
+      users.each do |u|
+        if i.user_id == u.id
+          @users += [u]
+        end
+      end
+    end
+    @answers = StudentsAnswer.where(task_id: params[:id])
   end
 
   def update

@@ -1,5 +1,9 @@
 class GroupsController < ApplicationController
 
+  def index
+    @groups = Group.all
+  end
+
   def new
     @group = Group.new
   end
@@ -23,9 +27,9 @@ class GroupsController < ApplicationController
     @tasks = []
     taskgroup.each do |taskgroup|
       tasks.each do |task|
-        if taskgroup.atask_id == task.id
+        if (taskgroup.atask_id == task.id)
           next if task.nil?
-          @tasks += [Atask.find(task.id)]
+          @tasks += [task]
         end
       end
     end
