@@ -1,10 +1,25 @@
 class AtasksController < ApplicationController
+
   def new
+    @task = Atask.new
+  end
+
+  def create
+    @task = Atask.new(task_params)
+    if @task.save
+      @tasks_group = TasksGroup.new do |u|
+        u.atask_id = @task.id
+        u.group_id = params[:atask][:group_id]
+      end
+      @tasks_group.save
+      flash[:success] = "Task was created"
+      redirect_to group_url(params[:atask][:group_id])
+    end
   end
 
   def edit
     @task = Atask.find(params[:id])
-    @users = User.where(task_id:  @task.id)
+    @users = User.all
   end
 
   def update
@@ -25,6 +40,6 @@ class AtasksController < ApplicationController
   private
 
   def task_params
-    params.require(:atask).permit(:content)
+    params.require(:atask).permit(:name, :content)
   end
 end

@@ -1,15 +1,27 @@
 class SendToDropboxJob < ApplicationJob
   queue_as :low_priority
 
-
-
   def perform(id)
-
     puts "-------------------------|||||||||||-----------------------------------"
-
     @APP_KEY =  'mpevvugos9qdluz'
     @APP_SECRET = 'qfvev9j7yccr3q3'
     @ACCESS_TOKEN = 'wf9D-O0OWuAAAAAAAAAASt0sZwocWVpB3FCm903NkPOApJdhpZAV9AViT_ErtJy1'
+
+    client = DropboxApi::Client.new("wf9D-O0OWuAAAAAAAAAASt0sZwocWVpB3FCm903NkPOApJdhpZAV9AViT_ErtJy1")
+    puts "CLIENT WAS CREATED!"
+    puts "OK , LETS UPLOAD A FILE..."
+    user = User.find_by_id(id)
+    answer = Answer.find_by_user_id(id)
+    text = RestClient.get  "https://api.judge0.com/submissions/#{answer.content}?
+                                      base64_encoded=false&fields=stdout,stderr,status_id,
+                                              language_id,time,compile_output"
+    file = client.upload("/#{user.email.split('@').first}/task#{user.task_id}_#{user.updated_at}.txt", "#{text}") # => Dropbox::FileMetadata
+    #puts file.size # => 9
+    #puts file.rev # => a1c10ce0dd78
+    puts "FILE WAS UPLOADED!"
+    puts "------------------------------------------------------------"
+  end
+end
 =begin
     require 'dropbox_sdk'
     puts "FIRST"
@@ -58,24 +70,4 @@ class SendToDropboxJob < ApplicationJob
    #client = DropboxApi::Client.new(ENV['wf9D-O0OWuAAAAAAAAAASbK3jEgLrB_vnBuiYqgUlWa8n7reoDEuRm5ugifZm9hB'])
 =end
 
-    client = DropboxApi::Client.new("wf9D-O0OWuAAAAAAAAAASt0sZwocWVpB3FCm903NkPOApJdhpZAV9AViT_ErtJy1")
 
-    puts "CLIENT WAS CREATED!"
-
-    puts "OK , LETS UPLOAD A FILE..."
-
-    user = User.find_by_id(id)
-    answer = Answer.find_by_user_id(id)
-    text = RestClient.get  "https://api.judge0.com/submissions/#{answer.content}?
-  base64_encoded=false&fields=stdout,stderr,status_id,language_id,time,compile_output"
-    file = client.upload("/#{user.email.split('@').first}/task#{user.task_id}_#{user.updated_at}.txt", "#{text}") # => Dropbox::FileMetadata
-    #puts file.size # => 9
-    #puts file.rev # => a1c10ce0dd78
-    puts "FILE WAS UPLOADED!"
-
-
-    puts "------------------------------------------------------------"
-
-
-  end
-end

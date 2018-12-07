@@ -1,28 +1,25 @@
 <% provide(:title, "Edit user") %>
-<h1>Update the task</h1>
 
-<div class="row">
-  <div class="col-md-6 col-md-offset-3">
-    <% @meta = true %>
-    <% @users = User.all %>
-
-
-    <%= form_for(@task) do |f| %>
-
-      <%= f.label :content %>
-      <%= f.text_area :content , class: 'form-control' %>
-
-
-      <h3>U can add these students to this task:</h3>
-
-
-      <ul class="teacher_admin">
-        <%@users.each do |user|%>
-        <%= render user %>
+  <div class="left jumbotron">
+    <h1>Update the task</h1>
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <% @meta = true %>
+          <%= form_for(@task) do |f| %>
+            <div class="field">
+               <%= f.label :name %>
+               <%= f.text_area :name, class: 'form-control' %>
+               <%= f.label :content %>
+               <%= f.text_area :content, class: 'form-control' %>
+            </div>
+            <h3>U can add these students to this task:</h3>
+            <ul class="teacher_admin">
+            <%@users.each do |user|%>
+              <%= render user %>
+            <%end%>
+            </ul>
+            <%=f.submit "Save changes", class: "btn btn-primary" %>
           <%end%>
-      </ul>
-      <%= f.submit "Save changes", class: "btn btn-primary" %>
-    <% end %>
-
+        </div>
+      </div>
   </div>
-</div>

@@ -1,56 +1,41 @@
 <% provide(:title,"Home") %>
   <title> <%= full_title(yield(:title)) %> </title>
-<div class="left jumbotron">
+  <div class="left jumbotron">
     <h1> Student's answer: </h1>
-  <div class="center jumbotron">
-  <% if @user.status == "complete" %>
-    <h3 style="color:#008000">[<%= @user.status %>]</h3>
-  <% else %>
-    <h3 style="color:#ff0000">[<%= @user.status %>]</h3>
-  <% end %>
+    <div class="center jumbotron">
+      <% if @user.status == "complete" %>
+        <h3 style="color:#008000">[<%= @user.status %>]</h3>
+      <%else%>
+        <h3 style="color:#ff0000">[<%= @user.status %>]</h3>
+      <% end %>
 
-    <% if @answer.final == true %>
-      <h3 style="color:#008000">[<%= "final" %>]</h3>
-    <% else %>
-      <h3 style="color:#ff0000">[<%= "not final" %>]</h3>
-    <% end %>
-  </div>
+      <% if @answer.final == true %>
+        <h3 style="color:#008000">[<%= "final" %>]</h3>
+      <% else %>
+        <h3 style="color:#ff0000">[<%= "not final" %>]</h3>
+      <% end %>
+    </div>
 
-  <%@text.each do |text|%>
-    <p><%=text%></p>
-    <%break if text == "compile_output"%>
-  <%end%>
+    <%@text.each do |text|%>
+      <p><%=text%></p>
+      <%break if text == "compile_output"%>
+    <%end%>
 
-  <div class="center jumbotron">
-
-
-<h4>
-  <%unless @user.status == "complete" %>
-
-
-    <%= form_for(:feedback, url: users_feedback_path(@user)) do |f| %>
-
-
-      <%= f.label :content %>
-      <%= f.text_area :content, class: 'form-control', placeholder: "Compose the feedback..." %>
-
-    <%if @answer.final%>
-      <%= f.submit "complete", name: 'complete', class: "btn btn-primary" %>
+    <div class="center jumbotron">
+      <h4>
+        <%unless @user.status == "complete" %>
+          <%= form_for(:feedback, url: users_feedback_path(@user)) do |f| %>
+            <%= f.label :content %>
+            <%= f.text_area :content, class: 'form-control', placeholder: "Compose the feedback..." %>
+            <%if @answer.final%>
+              <%= f.submit "complete", name: 'complete', class: "btn btn-primary" %>
+            <%end%>
+            <p>  </p>
+            <%= f.submit "rework", name: 'rework', class: "btn btn-primary" %>
+          <%end%>
+        <%else%>
+          <%= link_to "Download this task", administration_download_user_path, class: "btn btn-primary" %>
         <%end%>
-<p>                 </p>
-      <%= f.submit "rework", name: 'rework', class: "btn btn-primary" %>
-
-
-    <% end %>
-
-
-    <% else %>
-
-    <%= link_to "Download this task", administration_download_user_path, class: "btn btn-primary" %>
-
-  <%end%>
-</h4>
-
+      </h4>
+    </div>
   </div>
-
-</div>

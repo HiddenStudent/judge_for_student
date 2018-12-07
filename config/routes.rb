@@ -14,10 +14,6 @@ Rails.application.routes.draw do
 
   post 'user_signup', to: 'users#create'
 
-  get 'atasks/new'
-
-  get 'atasks/edit'
-
   get 'static_pages/index'
 
   devise_for :users, controllers: {sessions: 'users/sessions'}
@@ -60,6 +56,7 @@ Rails.application.routes.draw do
   resources :atasks
   resources :users
   resources :groups
+  resources :students_answer
 
   post 'answ_create', to: 'answ#create_answ'
 

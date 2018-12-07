@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181206151305) do
+ActiveRecord::Schema.define(version: 20181207152609) do
 
   create_table "answers", force: :cascade do |t|
     t.text "content"
@@ -20,13 +20,16 @@ ActiveRecord::Schema.define(version: 20181206151305) do
     t.integer "task_id"
     t.boolean "sending", default: false
     t.boolean "final", default: false
+    t.integer "group_id"
+    t.string "status", default: "in process"
   end
 
   create_table "atasks", force: :cascade do |t|
     t.text "content"
-    t.integer "id_lang"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
+    t.integer "tasks_group_id"
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
@@ -54,10 +57,25 @@ ActiveRecord::Schema.define(version: 20181206151305) do
 
   create_table "groups", force: :cascade do |t|
     t.integer "teacher_id"
-    t.integer "group_id"
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "students_answers", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "answer_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "task_id"
+  end
+
+  create_table "tasks_groups", force: :cascade do |t|
+    t.integer "group_id"
+    t.integer "task_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "atask_id"
   end
 
   create_table "users", force: :cascade do |t|

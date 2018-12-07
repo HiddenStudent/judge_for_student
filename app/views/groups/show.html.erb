@@ -1,0 +1,10 @@
+ <% provide(:title, 'All tasks') %>
+ <div class="left jumbotron">
+   <h1>All tasks</h1>
+   <ul class="teacher_admin">
+     <%=render @tasks %>
+     <div class="center jumbotron">
+       <%=link_to "Add new task", new_atask_path(params[:id]), class: "btn btn-lg btn-primary" %>
+     </div>
+   </ul>
+ </div>

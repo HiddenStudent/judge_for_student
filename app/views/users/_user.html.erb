@@ -4,13 +4,16 @@
   <% if current_user.teacher?  %>
 
 
-<% unless @meta %>
-    <%= link_to "Destroy", admin_destroy_user_path(user), method: :delete, data: { confirm: "You sure?" } %>
-<%end%>
-
-    <%if @meta%>
-    <%= link_to "Add to task" , user_update_task_path(user,@task), method: :put, data:{confirm: "You sure?"} %>
+    <% unless @meta %>
+      <%= link_to "Destroy", admin_destroy_user_path(user), method: :delete, data: { confirm: "You sure?" } %>
     <%end%>
 
-  <% end %>
+    <%if @meta%>
+        <%= link_to "Add to task" , user_update_task_path(user,@task), method: :put, data:{confirm: "You sure?"} %>
+    <%end%>
+  <%end%>
+    <%#= link_to "Add to task" , user_update_task_path(user,@task), method: :put, data:{confirm: "You sure?"} %>
+
+
+
 </li>

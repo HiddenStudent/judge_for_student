@@ -1,15 +1,12 @@
-
 <% provide(:title,"Judge Report") %>
-<div class="left jumbotron">
-<h1>Report from Judge()</h1>
 
-
-  <h3 style="color:#ff0000" >Ur code: </h3>
-  <p> <%=@code%> </p>
-  <h3 style="color:#ff0000" >Ur report: </h3>
-<%@text.each do |text|%>
-  <p><%=text%></p>
-  <%break if text == "compile_output"%>
-<%end%>
-
-</div>
+  <div class="left jumbotron">
+    <h1>Report from Judge()</h1>
+    <h3 style="color:#ff0000" >Ur code: </h3>
+    <p> <%=@code%> </p>
+    <h3 style="color:#ff0000" >Ur report: </h3>
+    <%@text.each do |text|%>
+      <p><%=text%></p>
+      <%break if text == "compile_output"%>
+    <%end%>
+  </div>
