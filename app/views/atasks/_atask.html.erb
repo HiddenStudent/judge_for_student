@@ -5,8 +5,8 @@
       <% @users_sent = Answer.where(task_id: atask.id, sending: true) %>
       <%=link_to "[ #{@users_sent.count} /  #{@users_all.count} ]",    answ_path(atask)   %>
     <%else%>
-      <%= link_to "Task: #{atask.name} ", atask_path(atask.id) , class: "btn btn-lg btn-primary" %>
-      <%=TasksGroup.find_by_group_id(params[:id]).atask_id%>
-      <%=atask.id%>
+      <% if StudentsAnswer.find_by_user_id(current_user.id).task_id == atask.id %>
+        <%= link_to "Task: #{atask.name} ", atask_path(atask.id) , class: "btn btn-lg btn-primary" %>
+      <%end%>
     <%end%>
   </p>

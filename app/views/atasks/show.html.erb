@@ -1,7 +1,7 @@
 <% provide(:title,"My task") %>
 
   <div class="center jumbotron">
-    <% unless current_user.task_id == 0 %>
+    <% unless StudentsAnswer.find_by_user_id(current_user.id).task_id == 0 %>
       <h1> My task : </h1>
       <h3>{<%= @task.content %>}</h3>
       <%if current_user.status == "complete" %>

@@ -4,11 +4,15 @@ class AtasksController < ApplicationController
     @task = Atask.new
   end
 
+  def index
+
+  end
+
   def create
     @task = Atask.new(task_params)
     if @task.save
       @tasks_group = TasksGroup.new do |u|
-        u.atask_id = @task.id
+        u.task_id = @task.id
         u.group_id = params[:atask][:group_id]
       end
       @tasks_group.save
@@ -33,6 +37,7 @@ class AtasksController < ApplicationController
   end
 
   def show
+    puts "==========#{params}"
     @task = Atask.find(params[:id])
   end
 

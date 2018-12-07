@@ -11,6 +11,9 @@ class GroupsController < ApplicationController
   def create
     @group = Group.new(group_params)
     if @group.save
+      user = current_user
+      user.group_id = @group.id
+      user.save
       flash[:success] = "Group was created"
       redirect_to administration_path
     end
@@ -22,12 +25,12 @@ class GroupsController < ApplicationController
 
   def show
     @group = Group.find_by(params[:id])
-    taskgroup = TasksGroup.all
+    taskgroup = TasksGroup.where(group_id: params[:id])
     tasks = Atask.all
     @tasks = []
     taskgroup.each do |taskgroup|
       tasks.each do |task|
-        if (taskgroup.atask_id == task.id)
+        if (taskgroup.task_id == task.id)
           next if task.nil?
           @tasks += [task]
         end

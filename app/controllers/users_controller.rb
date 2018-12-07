@@ -61,7 +61,7 @@ class UsersController < ApplicationController
           redirect_to edit_atask_url(params[:task_id])
         end
       else
-        flash[:danger] = "This student alredy added"
+        flash[:danger] = "This student already added"
         redirect_to edit_atask_url(params[:task_id])
 
       end
@@ -116,7 +116,8 @@ class UsersController < ApplicationController
   end
 
   def update
-    unless  params[:picture].nil?
+
+    unless  params[:user][:picture].nil?
       @user = current_user.update user_avatar
       #if @user.save
       flash[:success] = "Avatar was uploaded!"
