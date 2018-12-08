@@ -1,5 +1,8 @@
 class TeacherAdminController < ApplicationController
 
+  before_action :teacher
+  before_action :activated
+
   def index
 
   end
@@ -48,13 +51,12 @@ class TeacherAdminController < ApplicationController
   end
 
   def check_answ
-    @answer = Answer.find_by_user_id(params[:id])
+    answer_id = StudentsAnswer.where(task_id: params[:id])
+    @answer_id = answer_id.find_by_user_id(current_user.id)
+    @answer = Answer.find(@answer_id.answer_id)
     text = RestClient.get  "https://api.judge0.com/submissions/#{@answer.content}?
-                                 base64_encoded=false&fields=stdout,stderr,status_id,
-                                      language_id,time,compile_output"
+                               base64_encoded=false&fields=status,language,time&page=4&per_page=2"
     @text = text.split(',')
-    #SendToDropboxJob.set(wait: 0.seconds).perform_later(params[:id])
-     @user = User.find_by_id(params[:id])
-     #flash[:success] = col
+    @user = User.find_by_id(params[:id])
   end
 end

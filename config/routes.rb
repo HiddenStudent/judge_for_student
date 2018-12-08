@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   resources :activation, only: [:edit]
 
   match 'answ_report/:test' => 'answ#show_report', :via => :get, :as => :answ_report
+  match 'answ_create/' => 'answ#create_answ', :via => :post, :as => :answ_create
+
 
   get 'new_users', to: 'users#new'
 
@@ -38,8 +40,8 @@ Rails.application.routes.draw do
 
   get 'administration_tasks', to: 'teacher_admin#tasks'
 
-  match 'users_complete/:id/:text' => 'users#edit_complete' , :via => :get, :as => :users_complete
-  match 'users_rework/:id/:text' => 'users#edit_rework' , :via => :get, :as => :users_rework
+  match 'users_complete/:id/:text/:ans_id' => 'users#edit_complete' , :via => :get, :as => :users_complete
+  match 'users_rework/:id/:text/:ans_id' => 'users#edit_rework' , :via => :get, :as => :users_rework
 
   match 'users_feedback/:id' => 'users#edit_feedback' , :via => :post, :as => :users_feedback
 

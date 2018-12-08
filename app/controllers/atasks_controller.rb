@@ -1,5 +1,9 @@
 class AtasksController < ApplicationController
 
+  before_action :logged_in_user
+  before_action :teacher, only: [:create,:update,:edit,:new]
+  before_action :activated
+
   def new
     @task = Atask.new
   end
@@ -37,8 +41,13 @@ class AtasksController < ApplicationController
   end
 
   def show
-    puts "==========#{params}"
     @task = Atask.find(params[:id])
+    test = StudentsAnswer.where(user_id: current_user.id)
+    test = test.find_by_task_id(params[:id])
+    @studentsanswer = test
+    unless test.nil?
+      @final = test.final
+    end
   end
 
 

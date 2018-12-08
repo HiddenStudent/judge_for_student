@@ -3,13 +3,14 @@
   <div class="left jumbotron">
     <h1> Student's answer: </h1>
     <div class="center jumbotron">
-      <% if @user.status == "complete" %>
+      <%= params%>
+      <% if @answer_id.status == "complete" %>
         <h3 style="color:#008000">[<%= @user.status %>]</h3>
       <%else%>
         <h3 style="color:#ff0000">[<%= @user.status %>]</h3>
       <% end %>
 
-      <% if @answer.final == true %>
+      <% if @answer_id.final == true %>
         <h3 style="color:#008000">[<%= "final" %>]</h3>
       <% else %>
         <h3 style="color:#ff0000">[<%= "not final" %>]</h3>
@@ -23,11 +24,12 @@
 
     <div class="center jumbotron">
       <h4>
-        <%unless @user.status == "complete" %>
+        <%unless @answer_id.status == "complete" %>
           <%= form_for(:feedback, url: users_feedback_path(@user)) do |f| %>
             <%= f.label :content %>
             <%= f.text_area :content, class: 'form-control', placeholder: "Compose the feedback..." %>
-            <%if @answer.final%>
+            <%= f.hidden_field :ans_id, value: @answer_id.id %>
+            <%if @answer_id.final%>
               <%= f.submit "complete", name: 'complete', class: "btn btn-primary" %>
             <%end%>
             <p>  </p>

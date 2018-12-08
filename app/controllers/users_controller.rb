@@ -1,5 +1,9 @@
 class UsersController < ApplicationController
 
+  before_action :activated
+  before_action :logged_in_user
+  before_action :teacher , except: [:update]
+
   def index
     @users = User.all
   end
@@ -7,9 +11,9 @@ class UsersController < ApplicationController
   def edit_feedback
     params[:feedback][:content] = "no comment" if params[:feedback][:content].blank?
     if params[:rework] == 'rework'
-      redirect_to  users_rework_path(params[:id],params[:feedback][:content])
+      redirect_to  users_rework_path(params[:id],params[:feedback][:content],params[:feedback][:ans_id])
     elsif params[:complete] == 'complete'
-      redirect_to  users_complete_path(params[:id],params[:feedback][:content])
+      redirect_to  users_complete_path(params[:id],params[:feedback][:content],params[:feedback][:ans_id])
     else
       redirect_to administration_path
     end
@@ -31,21 +35,20 @@ class UsersController < ApplicationController
   end
 
   def edit_rework
-    @user = User.find_by_id(params[:id])
-    @answer = Answer.find_by_user_id(params[:id])
-    @user.status = "rework"
+    puts "============ans id #{params[:ans_id]}"
+    @user = User.find(params[:id])
+    @answer = StudentsAnswer.find(params[:ans_id])
+    @answer.status = "rework"
     @answer.sending = false
-    @answer.content = nil
+    ans = Answer.find(@answer.answer_id)
+    ans.content = nil
+    ans.save
     @answer.final = false
     @answer.save
     @user.save
-    StudentMailer.info_status(@user,params[:text]).deliver_now
+    StudentMailer.info_status(@user,params[:text],@answer).deliver_now
     flash[:success] = "Email about changes was sent to student."
     redirect_to administration_path
-    #else
-    #flash[:danger] = "something went wrong"
-    #redirect_to administration_path
-    #end
   end
 
   def update_task_id

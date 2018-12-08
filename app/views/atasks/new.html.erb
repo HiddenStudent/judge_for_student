@@ -4,8 +4,8 @@
 
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
-<%=puts "===============#{params[:format]}"%>
     <%= form_for(@task) do |f| %>
+      <%= render 'shared/error_messages', object: f.object %>
       <div class="field">
         <%= f.label :name %>
         <%= f.text_area :name, class: 'form-control' %>

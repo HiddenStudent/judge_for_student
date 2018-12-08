@@ -1,5 +1,9 @@
 class GroupsController < ApplicationController
 
+  before_action :logged_in_user
+  before_action :teacher, only: [:create,:update,:edit,:new,:destroy]
+  before_action :activated
+
   def index
     @groups = Group.all
   end

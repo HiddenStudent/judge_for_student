@@ -1,19 +1,9 @@
 class AnswController < ApplicationController
+
+  before_action :logged_in_user
+  before_action :activated
+
   def new
-    test = Answer.find_by_user_id(current_user.id)
-    unless test.nil?
-      @final = test.final
-    else
-      @final = false
-    end
-  end
-
-
-  def edit
-
-  end
-
-  def index
 
   end
 
@@ -31,64 +21,50 @@ class AnswController < ApplicationController
     @answers = StudentsAnswer.where(task_id: params[:id])
   end
 
-  def update
-
-  end
-
-  def destroy
-
-  end
-
   def show_report
     testt = params[:test]
+    puts "============#{testt}"
     @code = testt
     res =  RestClient.post 'https://api.judge0.com/submissions/?base64_encoded=false&wait=false/',
-                             {language_id: '4', source_code: "#{testt}"}
+                           {language_id: '4', source_code: "#{testt}"}
     res = JSON.parse(res)    #  Parsing JSON file
     res = res["token"]
     text = RestClient.get  "https://api.judge0.com/submissions/#{res}?
-                             base64_encoded=false&fields=stdout,stderr,status_id,
-                                  language_id,time,compile_output"
-     @text = text.split(',')
+                               base64_encoded=false&fields=status,language,time&page=4&per_page=2"
+    @text = text.split(',')
   end
 
 
   def create_answ
-    #redirect_to url_with_protocol("google.com")
-    #AnswController.do_it
-
     CreateAnswerJob.set(wait: 5.seconds).perform_later(1)
-    @test = Answer.find_by_user_id(current_user.id)
+    test = StudentsAnswer.where(user_id: current_user.id)
+    @test = test.find_by_task_id(params[:answ][:task_id])
     unless params[:answ][:content].blank?
-
-      if params[:create] == 'create'
-        #CreateAnswerJob.set(wait: 5.seconds).perform_later(@test,params[:answ][:content])
-        if @test.nil?
-          @answer = Answer.new(content:params[:answ][:content],user_id:current_user.id,
-                             task_id:current_user.task_id, sending:false )
-          if params[:answ][:final] == '1'
-            @answer.final = true
-          end
+      if params[:create] == 'Create'
+        if @test.answer_id.nil?
+          @answer = Answer.new(content:params[:answ][:content])
           if @answer.save
-            current_user.status = "In process"
-            current_user.save
+            @test.update_attributes(status: "In process", answer_id: @answer.id)
+            if params[:answ][:final] == '1'
+              @test.final = true
+            end
+            @test.save
             flash[:success] = " Ur answer was creating"
+            redirect_to root_path
           end
         else
-          @test.content = params[:answ][:content]
-          @test.sending = false
-          if params[:answ][:final] == '1'
-            @test.final = true
-          end
-          if @test.save
-            current_user.status = "In process"
-            current_user.save
-            flash[:success] = " Answer was updating"
+          @answer = Answer.find(@test.answer_id)
+          @answer.content = params[:answ][:content]
+          if @answer.save
+            @test.update_attributes(status: "In process")
+            if params[:answ][:final] == '1'
+              @test.final = true
+            end
+            @test.save
+            flash[:success] = "Ur answer was updating"
+            redirect_to root_path
           end
         end
-          redirect_to root_path
-          # Answer.delay.create_answ(@test,params[:answ][:content])
-          # redirect_to url_with_protocol("google.com")
       else
         redirect_to answ_report_path(params[:answ][:content])
       end
@@ -97,6 +73,31 @@ class AnswController < ApplicationController
       render 'new'
     end
   end
+
+  private
+
+  def group_params
+    params.require(:answer).permit(:content)
+  end
+
+  def edit
+
+  end
+
+  def index
+
+  end
+
+  def update
+
+  end
+
+  def destroy
+
+  end
+    #redirect_to url_with_protocol("google.com")
+    #AnswController.do_it
+
 end
 
 

@@ -1,12 +1,15 @@
   <p>
     <%if current_user.teacher?%>
-      <%= link_to "Task: #{atask.name} ", edit_atask_path(atask) , class: "btn btn-lg btn-primary" %>
+      <%= link_to "Task: #{atask.name} ", atask_path(atask) , class: "btn btn-lg btn-primary" %>
+      <%= link_to "Edit: ", edit_atask_path(atask) , class: "btn btn-lg btn-primary" %>
       <% @users_all = StudentsAnswer.where(task_id: atask.id) %>
-      <% @users_sent = Answer.where(task_id: atask.id, sending: true) %>
+      <% @users_sent = StudentsAnswer.where(task_id: atask.id, sending: true) %>
       <%=link_to "[ #{@users_sent.count} /  #{@users_all.count} ]",    answ_path(atask)   %>
     <%else%>
-      <% if StudentsAnswer.find_by_user_id(current_user.id).task_id == atask.id %>
-        <%= link_to "Task: #{atask.name} ", atask_path(atask.id) , class: "btn btn-lg btn-primary" %>
+      <%unless StudentsAnswer.find_by_user_id(current_user.id).nil? %>
+        <% if StudentsAnswer.find_by_user_id(current_user.id).task_id == atask.id %>
+          <%= link_to "Task: #{atask.name} ", atask_path(atask.id) , class: "btn btn-lg btn-primary" %>
+        <%end%>
       <%end%>
     <%end%>
   </p>

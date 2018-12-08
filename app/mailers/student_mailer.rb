@@ -5,7 +5,8 @@ class StudentMailer < ApplicationMailer
   #
   #   en.student_mailer.info_status.subject
   #
-  def info_status(user,text)
+  def info_status(user,text,answer)
+    @answer = answer
     @user = user
     @text = text
     mail to: user.email, subject: "Information about task"
@@ -15,7 +16,7 @@ class StudentMailer < ApplicationMailer
   # with the following lookup:
   #
   #   en.student_mailer.account_activation.subject
-  #
+
 
   def new_task_notify(user)
     @user = user

@@ -8,7 +8,8 @@ class CreateAnswerJob < ApplicationJob
     @answers = Answer.all
     #puts "============ #{@answers.first.id}"
     @answers.each do |answer|
-      next if answer.sending == true
+      student_answer = StudentsAnswer.find_by_answer_id(answer.id)
+      next if student_answer.sending == true
       unless answer.content.nil?
         puts "============= REQUESTING TO API"
         res =  RestClient.post 'https://api.judge0.com/submissions/?base64_encoded=false&wait=false/',
@@ -18,11 +19,12 @@ class CreateAnswerJob < ApplicationJob
         puts "============= ADDED"
         answer.content = res["token"]
         puts "===== content final"
-        answer.sending = true
+        student_answer.sending = true
+        student_answer.save
         puts "===== sending final"
         answer.save
         puts "===== save final"
-        puts "========== id : #{answer.id}, sending: #{answer.sending}"
+        puts "========== id : #{answer.id}, sending: #{student_answer.sending}"
       end
     end
     #delay.(run_at: Proc.new{ 10.seconds.from_now }).perform("qwe")
