@@ -19,7 +19,7 @@
         </p>
       <% end %>
       <div class="center jumbotron">
-        <%= link_to "Download all tasks as archive", administration_download_users_path(@users.first), class: "btn btn-primary" %>
+        <%= link_to "Download all tasks as archive", administration_download_users_path(@answers.first.task_id), class: "btn btn-primary" %>
       </div>
     </ul>
   <%else%>

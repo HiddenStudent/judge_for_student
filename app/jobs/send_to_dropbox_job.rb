@@ -1,21 +1,22 @@
 class SendToDropboxJob < ApplicationJob
   queue_as :low_priority
 
-  def perform(id)
+  def perform(id, task_id)
     puts "-------------------------|||||||||||-----------------------------------"
     @APP_KEY =  'mpevvugos9qdluz'
     @APP_SECRET = 'qfvev9j7yccr3q3'
     @ACCESS_TOKEN = 'wf9D-O0OWuAAAAAAAAAASt0sZwocWVpB3FCm903NkPOApJdhpZAV9AViT_ErtJy1'
-
     client = DropboxApi::Client.new("wf9D-O0OWuAAAAAAAAAASt0sZwocWVpB3FCm903NkPOApJdhpZAV9AViT_ErtJy1")
+
     puts "CLIENT WAS CREATED!"
     puts "OK , LETS UPLOAD A FILE..."
-    user = User.find_by_id(id)
-    answer = Answer.find_by_user_id(id)
-    text = RestClient.get  "https://api.judge0.com/submissions/#{answer.content}?
-                                      base64_encoded=false&fields=stdout,stderr,status_id,
-                                              language_id,time,compile_output"
-    file = client.upload("/#{user.email.split('@').first}/task#{user.task_id}_#{user.updated_at}.txt", "#{text}") # => Dropbox::FileMetadata
+    user = User.find(id)
+    answer = StudentsAnswer.where(task_id: task_id)
+    answer = answer.find_by_user_id(id)
+    text = RestClient.get  "https://api.judge0.com/submissions/#{Answer.find(answer.answer_id).content}?
+                               base64_encoded=false&fields=status,language,time&page=4&per_page=2"
+
+    file = client.upload("/#{user.email.split('@').first}/task#{task_id}_#{answer.updated_at}.txt", "#{text}") # => Dropbox::FileMetadata
     #puts file.size # => 9
     #puts file.rev # => a1c10ce0dd78
     puts "FILE WAS UPLOADED!"

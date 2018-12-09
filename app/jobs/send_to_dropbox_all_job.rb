@@ -7,25 +7,25 @@ class SendToDropboxAllJob < ApplicationJob
     @APP_SECRET = 'qfvev9j7yccr3q3'
     @ACCESS_TOKEN = 'wf9D-O0OWuAAAAAAAAAASt0sZwocWVpB3FCm903NkPOApJdhpZAV9AViT_ErtJy1'
     client = DropboxApi::Client.new("wf9D-O0OWuAAAAAAAAAASt0sZwocWVpB3FCm903NkPOApJdhpZAV9AViT_ErtJy1")
-    answers = Answer.where(task_id: task_id)
+
     #@answers.each do |answer|
     #if User.find_by_id(answer.user_id).status == "complete"
     #puts "nil?   #{answer.nil?}, answer.id  #{answer.id},status = #{User.find_by_id(answer.user_id).status }"
     #file = client.upload("/task#{task_id}/user_id_#{answer.user_id}.txt", "#{answer.content}") # => Dropbox::FileMetadata
+    answers = StudentsAnswer.where(task_id: task_id)
     arr = []
     puts "-------------I trying write to FILE"
     answers.each do |answer|
-      if User.find_by_id(answer.user_id).status == "complete"
-        puts "nil?   #{answer.nil?}, answer.id  #{answer.id},status = #{User.find_by_id(answer.user_id).status }"
-        file = "task#{task_id}_user_id#{answer.user_id}.text"
+      if answer.status == "complete"
+        puts "nil?   #{answer.nil?},status = #{answer.status }"
+        file = "task_#{Atask.find(task_id).name}_user_#{answer.user_id}.text"
         filepath = "stuff_to_zip/#{file}"
         File.new(filepath, "w")
         arr += [file]
         print arr
         File.open(filepath, "w+") do |f|
-          text = RestClient.get  "https://api.judge0.com/submissions/#{answer.content}?
-                                        base64_encoded=false&fields=stdout,stderr,status_id,
-                                              language_id,time,compile_output"
+          text = RestClient.get  "https://api.judge0.com/submissions/#{Answer.find(answer.answer_id).content}?
+                               base64_encoded=false&fields=status,language,time&page=4&per_page=2"
           f.write(text)
         end
       end
@@ -66,7 +66,7 @@ class SendToDropboxAllJob < ApplicationJob
 
     File.open(zipfile_name) do |f|
       puts "eboy"
-      client.upload_by_chunks "/task#{task_id}_{Random.new.rand(100)}", f
+      client.upload_by_chunks "/task#{task_id}_#{Random.new.rand(100)}", f
       puts "nooo"
     end
 

@@ -62,10 +62,14 @@ class UsersController < ApplicationController
         u.user_id = params[:id]
         end
         if @students_answ.save
+          StudentMailer.new_task_notify(User.find(params[:id]),
+                                        Atask.find(params[:task_id])).deliver_now
           flash[:success] = "Student was added"
           redirect_to edit_atask_url(params[:task_id])
         end
       else
+        StudentMailer.new_task_notify(User.find(params[:id]),
+                                      Atask.find(params[:task_id])).deliver_now
         flash[:danger] = "This student already added"
         redirect_to edit_atask_url(params[:task_id])
 

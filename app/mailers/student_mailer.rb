@@ -18,9 +18,9 @@ class StudentMailer < ApplicationMailer
   #   en.student_mailer.account_activation.subject
 
 
-  def new_task_notify(user)
+  def new_task_notify(user,task)
     @user = user
-
+    @task = task
     mail to: user.email, subject: "Information about task"
   end
 

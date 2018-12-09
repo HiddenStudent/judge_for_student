@@ -29,16 +29,9 @@ Rails.application.routes.draw do
 
   get 'administration', to: 'teacher_admin#index'
 
-  get 'administration_new', to: 'teacher_admin#new'
-
-  post 'administration_create_task', to: 'teacher_admin#create_task'
-
   get 'administration_download_user/:id' => 'teacher_admin#download_user', :via => :get, :as => :administration_download_user
 
   get 'administration_download_users/:id' => 'teacher_admin#download_all', :via => :get, :as => :administration_download_users
-
-
-  get 'administration_tasks', to: 'teacher_admin#tasks'
 
   match 'users_complete/:id/:text/:ans_id' => 'users#edit_complete' , :via => :get, :as => :users_complete
   match 'users_rework/:id/:text/:ans_id' => 'users#edit_rework' , :via => :get, :as => :users_rework
@@ -46,8 +39,6 @@ Rails.application.routes.draw do
   match 'users_feedback/:id' => 'users#edit_feedback' , :via => :post, :as => :users_feedback
 
   match 'user_update_task/:id/:task_id' => 'users#update_task_id', :via => :put, :as => :user_update_task
-
-  match 'user_progress/:task_id' => 'teacher_admin#tasks_progress', :via => :get, :as => :user_progress
 
   match 'check_answ/:id' => 'teacher_admin#check_answ', :via => :get, :as => :check_answ
 
@@ -59,10 +50,6 @@ Rails.application.routes.draw do
   resources :users
   resources :groups
   resources :students_answer
-
-  post 'answ_create', to: 'answ#create_answ'
-
-  get 'tasks_progress', to: 'teacher_admin#tasks_progress'
 
   match 'users/:id' => 'users#destroy', :via => :delete, :as => :admin_destroy_user
 

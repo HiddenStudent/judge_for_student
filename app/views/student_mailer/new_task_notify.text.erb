@@ -1,23 +1,8 @@
-
-
 Hi <%= @user.email.split('@').first %>,
 
 
-  We want to notify you about the change of ur task:
+  We want to notify you about new task:
 
+<%=@task.content %>
 
-
-  <%if @user.status == "complete" %>
-    Ur task was complete. U did a good job! [<%= @user.status %>]
-
-
-      Now u have a new task...see details on ur <%= link_to "home page", root_url %>
-
-  <% else %>
-
-      U didn't cope with task!
-
-
-      Now u have a new task...see details on ur <%= link_to "home page", root_url %>
-
-  <%end%>
+U can already <%= link_to "send ur answer", atask_url(@task.id) %>
