@@ -3,6 +3,19 @@ class AnswController < ApplicationController
   before_action :logged_in_user
   before_action :activated
 
+
+  def edit
+
+  end
+
+  def index
+
+  end
+
+  def update
+
+  end
+
   def new
 
   end
@@ -74,27 +87,22 @@ class AnswController < ApplicationController
     end
   end
 
+  def destroy
+    puts "===================#{params}"
+    studentanswer = StudentsAnswer.where(task_id: params[:format])
+    studentanswer = studentanswer.find_by_user_id(params[:id])
+    Answer.find(studentanswer.answer_id).destroy unless studentanswer.answer_id.nil?
+    studentanswer.destroy
+    studentanswer.save
+    redirect_to answ_path(params[:format])
+  end
+
   private
 
   def group_params
     params.require(:answer).permit(:content)
   end
 
-  def edit
-
-  end
-
-  def index
-
-  end
-
-  def update
-
-  end
-
-  def destroy
-
-  end
     #redirect_to url_with_protocol("google.com")
     #AnswController.do_it
 

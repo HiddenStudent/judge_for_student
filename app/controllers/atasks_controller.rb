@@ -50,6 +50,29 @@ class AtasksController < ApplicationController
     end
   end
 
+  def destroy
+    group = TasksGroup.find_by_task_id(params[:id]).group_id
+    Atask.find(params[:id]).destroy
+    puts "TASK WAS DELETED"
+    TasksGroup.find_by_task_id(params[:id]).destroy
+    puts "TASKSGROUP WAS DELETED"
+    studentanswer = StudentsAnswer.where(task_id: params[:id])
+    answer = Answer.all
+    studentanswer.each do |s|
+      answer.each do |a|
+        if s.answer_id == a.id
+          puts "==========delete Answer a.destroy, id = #{a.id}, s.id = #{s.id}"
+          a.destroy
+          a.save
+        end
+      end
+      puts "======= delete StudentsAnswer = #{s.id}"
+      s.destroy
+      s.save
+    end
+    redirect_to group_path(group)
+  end
+
 
   private
 

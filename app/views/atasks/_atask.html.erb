@@ -5,6 +5,7 @@
       <% @users_all = StudentsAnswer.where(task_id: atask.id) %>
       <% @users_sent = StudentsAnswer.where(task_id: atask.id, sending: true) %>
       <%=link_to "[ #{@users_sent.count} /  #{@users_all.count} ]",    answ_path(atask)   %>
+      <%= link_to "[delete task]", atask_path(atask), method: :delete, data: { confirm: "You sure?" } %>
     <%else%>
       <%unless StudentsAnswer.find_by_user_id(current_user.id).nil? %>
         <% if StudentsAnswer.find_by_user_id(current_user.id).task_id == atask.id %>

@@ -12,8 +12,10 @@
           <% if @answ.nil? || @answ.sending == false  %>
             [not sent]
           <%else%>
-            <%= link_to "[sent]", check_answ_path(user) %>
+            <%= link_to "[sent]", check_answ_path(user,params[:id]) %>
           <%end%>
+          <%= link_to "[delete from task]", answ_path(user,params[:id]), method: :delete, data: { confirm: "You sure?" } %>
+
         </p>
       <% end %>
       <div class="center jumbotron">

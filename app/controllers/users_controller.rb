@@ -20,12 +20,11 @@ class UsersController < ApplicationController
   end
 
   def edit_complete
-    @user = User.find_by_id(params[:id])
-    @answer = Answer.find_by_user_id(params[:id])
-    @user.status = "complete"
-    #@user.save
-    if @user.save
-      StudentMailer.info_status(@user,params[:text]).deliver_now
+    @user = User.find(params[:id])
+    @answer = StudentsAnswer.find(params[:ans_id])
+    @answer.status = "complete"
+    if @answer.save
+      StudentMailer.info_status(@user,params[:text],@answer).deliver_now
       flash[:success] = "Email about changes was sent to student"
       redirect_to administration_path
     else
@@ -35,20 +34,23 @@ class UsersController < ApplicationController
   end
 
   def edit_rework
-    puts "============ans id #{params[:ans_id]}"
     @user = User.find(params[:id])
     @answer = StudentsAnswer.find(params[:ans_id])
     @answer.status = "rework"
     @answer.sending = false
     ans = Answer.find(@answer.answer_id)
-    ans.content = nil
+    ans.destroy
     ans.save
     @answer.final = false
-    @answer.save
-    @user.save
-    StudentMailer.info_status(@user,params[:text],@answer).deliver_now
-    flash[:success] = "Email about changes was sent to student."
-    redirect_to administration_path
+    @answer.answer_id = nil
+    if @answer.save
+      StudentMailer.info_status(@user,params[:text],@answer).deliver_now
+      flash[:success] = "Email about changes was sent to student."
+      redirect_to administration_path
+    else
+      flash[:danger] = "something went wrong"
+      redirect_to administration_path
+    end
   end
 
   def update_task_id
