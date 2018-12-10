@@ -12,7 +12,7 @@ class SendToDropboxAllJob < ApplicationJob
     #if User.find_by_id(answer.user_id).status == "complete"
     #puts "nil?   #{answer.nil?}, answer.id  #{answer.id},status = #{User.find_by_id(answer.user_id).status }"
     #file = client.upload("/task#{task_id}/user_id_#{answer.user_id}.txt", "#{answer.content}") # => Dropbox::FileMetadata
-    answers = StudentsAnswer.where(task_id: task_id)
+    answers = Studentanswer.where(task_id: task_id)
     arr = []
     puts "-------------I trying write to FILE"
     answers.each do |answer|

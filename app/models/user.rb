@@ -8,6 +8,7 @@ class User < ApplicationRecord
   #validates :task_id, presence: true
   belongs_to :atasks, optional: true
   belongs_to :answers, optional:true
+  has_many :studentanswers
   mount_uploader :picture, PictureUploader
 
   def activate

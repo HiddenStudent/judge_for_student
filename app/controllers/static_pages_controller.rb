@@ -1,16 +1,15 @@
 class StaticPagesController < ApplicationController
 
   def home
-    #render html: "it's home page"
     @user = current_user
   end
 
   def help
-    #render html: "it's help page"
+
   end
 
   def about
-    #render html: ""
+
   end
 
   def log_in

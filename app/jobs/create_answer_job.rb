@@ -8,7 +8,7 @@ class CreateAnswerJob < ApplicationJob
     @answers = Answer.all
     #puts "============ #{@answers.first.id}"
     @answers.each do |answer|
-      student_answer = StudentsAnswer.find_by_answer_id(answer.id)
+      student_answer = Studentanswer.find_by_answer_id(answer.id)
       next if student_answer.sending == true
       unless answer.content.nil?
         puts "============= REQUESTING TO API"

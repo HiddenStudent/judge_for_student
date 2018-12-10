@@ -13,13 +13,15 @@ class AtasksController < ApplicationController
   end
 
   def create
-    @task = Atask.new(task_params)
-    if @task.save
-      @tasks_group = TasksGroup.new do |u|
-        u.task_id = @task.id
+    task = Atask.new(task_params)
+    if task.save
+      tasks_group = Taskgroup.new do |u|
+        u.task_id = task.id
         u.group_id = params[:atask][:group_id]
       end
-      @tasks_group.save
+      tasks_group.save
+      task.taskgroup_id = tasks_group.id
+      task.save
       flash[:success] = "Task was created"
       redirect_to group_url(params[:atask][:group_id])
     end
@@ -42,8 +44,8 @@ class AtasksController < ApplicationController
 
   def show
     @task = Atask.find(params[:id])
-    test = StudentsAnswer.where(user_id: current_user.id)
-    test = test.find_by_task_id(params[:id])
+    user = User.find(current_user.id)
+    test = user.studentanswers.find_by_task_id(params[:id])
     @studentsanswer = test
     unless test.nil?
       @final = test.final
@@ -51,28 +53,20 @@ class AtasksController < ApplicationController
   end
 
   def destroy
-    group = TasksGroup.find_by_task_id(params[:id]).group_id
+    group = Taskgroup.find_by_task_id(params[:id]).group_id
     Atask.find(params[:id]).destroy
-    puts "TASK WAS DELETED"
-    TasksGroup.find_by_task_id(params[:id]).destroy
-    puts "TASKSGROUP WAS DELETED"
-    studentanswer = StudentsAnswer.where(task_id: params[:id])
-    answer = Answer.all
-    studentanswer.each do |s|
-      answer.each do |a|
-        if s.answer_id == a.id
-          puts "==========delete Answer a.destroy, id = #{a.id}, s.id = #{s.id}"
-          a.destroy
-          a.save
-        end
+    Taskgroup.find_by_task_id(params[:id]).destroy
+    studentanswer = Studentanswer.where(task_id: params[:id])
+    studentanswer.each do|s|
+      unless s.answer.nil?
+        s.answer.destroy
+        s.answer.save
       end
-      puts "======= delete StudentsAnswer = #{s.id}"
       s.destroy
       s.save
     end
     redirect_to group_path(group)
   end
-
 
   private
 

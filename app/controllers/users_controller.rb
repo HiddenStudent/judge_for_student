@@ -21,7 +21,7 @@ class UsersController < ApplicationController
 
   def edit_complete
     @user = User.find(params[:id])
-    @answer = StudentsAnswer.find(params[:ans_id])
+    @answer = Studentanswer.find(params[:ans_id])
     @answer.status = "complete"
     if @answer.save
       StudentMailer.info_status(@user,params[:text],@answer).deliver_now
@@ -35,7 +35,7 @@ class UsersController < ApplicationController
 
   def edit_rework
     @user = User.find(params[:id])
-    @answer = StudentsAnswer.find(params[:ans_id])
+    @answer = Studentanswer.find(params[:ans_id])
     @answer.status = "rework"
     @answer.sending = false
     ans = Answer.find(@answer.answer_id)
@@ -44,7 +44,7 @@ class UsersController < ApplicationController
     @answer.final = false
     @answer.answer_id = nil
     if @answer.save
-      StudentMailer.info_status(@user,params[:text],@answer).deliver_now
+     # StudentMailer.info_status(@user,params[:text],@answer).deliver_now
       flash[:success] = "Email about changes was sent to student."
       redirect_to administration_path
     else
@@ -54,36 +54,40 @@ class UsersController < ApplicationController
   end
 
   def update_task_id
-    alltask =  StudentsAnswer.where(task_id: params[:task_id])
-    unless alltask.nil?
-      if alltask.find_by_user_id(params[:id]).nil?
-        @students_answ = StudentsAnswer.new do |u|
-        u.task_id = params[:task_id]
-        u.user_id = params[:id]
+    unless User.find(params[:id]).studentanswers.nil?
+      if User.find(params[:id]).studentanswers.find_by_task_id(params[:task_id]).nil?
+        @students_answ = Studentanswer.new do |u|
+          u.task_id = params[:task_id]
+          u.user_id = params[:id]
+          u.save
         end
-        if @students_answ.save
+          @students_answ.save
+          user = User.find(params[:id])
+          user.studentanswer_id = @students_answ.id
+          user.save
           StudentMailer.new_task_notify(User.find(params[:id]),
                                         Atask.find(params[:task_id])).deliver_now
           flash[:success] = "Student was added"
           redirect_to edit_atask_url(params[:task_id])
-        end
       else
-        StudentMailer.new_task_notify(User.find(params[:id]),
-                                      Atask.find(params[:task_id])).deliver_now
         flash[:danger] = "This student already added"
         redirect_to edit_atask_url(params[:task_id])
-
       end
     else
-      @students_answ = StudentsAnswer.new do |u|
-      u.task_id = params[:task_id]
-      u.user_id = params[:id]
+      @students_answ = Studentanswer.new do |u|
+        u.task_id = params[:task_id]
+        u.user_id = params[:id]
+        u.save
       end
-      if @students_answ.save
+        @students_answ.save
+        user = User.find(params[:id])
+        user.studentanswer_id = @students_answ.id
+        user.save
+
+        StudentMailer.new_task_notify(User.find(params[:id]),
+                                      Atask.find(params[:task_id])).deliver_now
         flash[:success] = "Student was added"
         redirect_to edit_atask_url(params[:task_id])
-
-      end
     end
   end
 

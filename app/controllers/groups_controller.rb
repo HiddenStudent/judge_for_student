@@ -29,16 +29,10 @@ class GroupsController < ApplicationController
 
   def show
     @group = Group.find_by(params[:id])
-    taskgroup = TasksGroup.where(group_id: params[:id])
-    tasks = Atask.all
+    taskgroups = Group.find(params[:id]).taskgroups
     @tasks = []
-    taskgroup.each do |taskgroup|
-      tasks.each do |task|
-        if (taskgroup.task_id == task.id)
-          next if task.nil?
-          @tasks += [task]
-        end
-      end
+    taskgroups.each do |taskgroup|
+      @tasks += [taskgroup.atask]
     end
   end
 

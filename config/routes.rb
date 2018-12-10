@@ -4,8 +4,6 @@ Rails.application.routes.draw do
 
   resources :email_notify, only: [:edit]        #email
 
- # match 'activation_user/:id'=> 'activation#edit', :via => :get, :as => :activation_user
-
   resources :activation, only: [:edit]
 
   match 'answ_report/:test' => 'answ#show_report', :via => :get, :as => :answ_report
@@ -20,17 +18,12 @@ Rails.application.routes.draw do
 
   devise_for :users, controllers: {sessions: 'users/sessions'}
 
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-
-#  get 'users/new_registration', to: 'registrations#new'
-
   root to: 'static_pages#home'
 
 
   get 'administration', to: 'teacher_admin#index'
 
   get 'administration_download_user/:id' => 'teacher_admin#download_user', :via => :get, :as => :administration_download_user
-
   get 'administration_download_users/:id' => 'teacher_admin#download_all', :via => :get, :as => :administration_download_users
 
   match 'users_complete/:id/:text/:ans_id' => 'users#edit_complete' , :via => :get, :as => :users_complete
@@ -49,7 +42,6 @@ Rails.application.routes.draw do
   resources :atasks
   resources :users
   resources :groups
-  resources :students_answer
 
   match 'users/:id' => 'users#destroy', :via => :delete, :as => :admin_destroy_user
 

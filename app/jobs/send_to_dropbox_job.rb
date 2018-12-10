@@ -11,7 +11,7 @@ class SendToDropboxJob < ApplicationJob
     puts "CLIENT WAS CREATED!"
     puts "OK , LETS UPLOAD A FILE..."
     user = User.find(id)
-    answer = StudentsAnswer.where(task_id: task_id)
+    answer = Studentanswer.where(task_id: task_id)
     answer = answer.find_by_user_id(id)
     text = RestClient.get  "https://api.judge0.com/submissions/#{Answer.find(answer.answer_id).content}?
                                base64_encoded=false&fields=status,language,time&page=4&per_page=2"

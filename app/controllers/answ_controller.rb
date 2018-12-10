@@ -22,21 +22,15 @@ class AnswController < ApplicationController
 
   def show
     @users = []
-    ids = StudentsAnswer.where(task_id: params[:id])
-    users = User.all
-    ids.each do |i|
-      users.each do |u|
-        if i.user_id == u.id
-          @users += [u]
-        end
-      end
+    ids = Studentanswer.where(task_id: params[:id])
+    ids.each do |u|
+      @users += [u.user]
     end
-    @answers = StudentsAnswer.where(task_id: params[:id])
+    @answers = Studentanswer.where(task_id: params[:id])
   end
 
   def show_report
     testt = params[:test]
-    puts "============#{testt}"
     @code = testt
     res =  RestClient.post 'https://api.judge0.com/submissions/?base64_encoded=false&wait=false/',
                            {language_id: '4', source_code: "#{testt}"}
@@ -50,8 +44,8 @@ class AnswController < ApplicationController
 
   def create_answ
     CreateAnswerJob.set(wait: 5.seconds).perform_later(1)
-    test = StudentsAnswer.where(user_id: current_user.id)
-    @test = test.find_by_task_id(params[:answ][:task_id])
+    user = User.find(current_user.id)
+    @test =user.studentanswers.find_by_task_id(params[:answ][:task_id])
     unless params[:answ][:content].blank?
       if params[:create] == 'Create'
         if @test.answer_id.nil?
@@ -62,6 +56,9 @@ class AnswController < ApplicationController
               @test.final = true
             end
             @test.save
+            user = User.find(current_user.id)
+            user.studentanswer_id = @test.id
+            user.save
             flash[:success] = " Ur answer was creating"
             redirect_to root_path
           end
@@ -74,6 +71,9 @@ class AnswController < ApplicationController
               @test.final = true
             end
             @test.save
+            user = User.find(current_user.id)
+            user.studentanswer_id = @test.id
+            user.save
             flash[:success] = "Ur answer was updating"
             redirect_to root_path
           end
@@ -88,9 +88,8 @@ class AnswController < ApplicationController
   end
 
   def destroy
-    puts "===================#{params}"
-    studentanswer = StudentsAnswer.where(task_id: params[:format])
-    studentanswer = studentanswer.find_by_user_id(params[:id])
+    user = User.find(params[:id])
+    studentanswer =user.studentanswers.find_by_task_id(params[:format])
     Answer.find(studentanswer.answer_id).destroy unless studentanswer.answer_id.nil?
     studentanswer.destroy
     studentanswer.save
