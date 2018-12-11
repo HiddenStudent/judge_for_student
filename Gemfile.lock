@@ -39,6 +39,9 @@ GEM
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
+    activeuuid (0.6.1)
+      activerecord (>= 3.1)
+      uuidtools
     ansi (1.5.0)
     arel (8.0.0)
     ast (2.4.0)
@@ -437,6 +440,7 @@ GEM
       unf_ext
     unf_ext (0.0.7.5)
     unicode-display_width (1.4.0)
+    uuidtools (2.1.5)
     warden (1.2.8)
       rack (>= 2.0.6)
     web-console (3.5.1)
@@ -455,6 +459,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activeuuid
   bcrypt (= 3.1.12)
   bootstrap-sass (= 3.3.7)
   bootstrap-will_paginate (= 1.0.0)

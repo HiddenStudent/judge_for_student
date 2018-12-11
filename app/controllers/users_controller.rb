@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
 
-  before_action :activated
-  before_action :logged_in_user
-  before_action :teacher , except: [:update]
+ # before_action :activated
+ # before_action :logged_in_user
+ # before_action :teacher , except: [:update]
 
   def index
     @users = User.all
@@ -98,33 +98,20 @@ class UsersController < ApplicationController
   end
 
   def new
-    unless current_user.nil?
-      if current_user.teacher == true
-        @user = User.new
-      else
-        flash[:success] = "No permissions"
-        redirect_to root_path
-      end
-    else
-      flash[:success] = "No permissions"
-      redirect_to root_path
-    end
+    @user = User.new
   end
 
 
   def create
-    if current_user.teacher == true
-      @user = User.new(user_params)
-      token = @user.new_token
-      @user.activation_digest = token
-      if @user.save
-        StudentMailer.activation(@user).deliver_now
-        #UserMailer.account_activation(@user).deliver_now
-        flash[:info] = "Email for user was sent."
-        redirect_to administration_path
-      else
-        render 'new'
-      end
+    @user = User.new(user_params)
+    token = @user.new_token
+    @user.activation_digest = token
+    if @user.save
+      StudentMailer.activation(@user).deliver_now
+      flash[:info] = "Email for user was sent."
+      redirect_to administration_path
+    else
+      render 'new'
     end
   end
 
