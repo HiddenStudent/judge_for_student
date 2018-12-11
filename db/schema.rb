@@ -10,18 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181210180855) do
+ActiveRecord::Schema.define(version: 20181211085554) do
 
   create_table "answers", force: :cascade do |t|
     t.text "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id"
-    t.integer "task_id"
-    t.boolean "sending", default: false
-    t.boolean "final", default: false
-    t.integer "group_id"
-    t.string "status", default: "in process"
   end
 
   create_table "atasks", force: :cascade do |t|
@@ -83,7 +77,6 @@ ActiveRecord::Schema.define(version: 20181210180855) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "task_id", default: 0
-    t.string "status", default: "in process"
     t.string "activation_digest"
     t.boolean "activated", default: false
     t.string "picture", default: "no"
