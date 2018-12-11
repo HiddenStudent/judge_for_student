@@ -15,10 +15,7 @@ class AtasksController < ApplicationController
   def create
     task = Atask.new(task_params)
     if task.save
-      tasks_group = Taskgroup.new do |u|
-        u.task_id = task.id
-        u.group_id = params[:atask][:group_id]
-      end
+      tasks_group = Taskgroup.new(task_id: task.id, group_id: params[:atask][:group_id])
       tasks_group.save
       task.taskgroup_id = tasks_group.id
       task.save
@@ -44,26 +41,23 @@ class AtasksController < ApplicationController
 
   def show
     @task = Atask.find(params[:id])
-    user = User.find(current_user.id)
-    test = user.studentanswers.find_by_task_id(params[:id])
-    @studentsanswer = test
-    unless test.nil?
-      @final = test.final
-    end
+    @studentsanswer = @task.studentanswers(params[:id],current_user.id)
+
   end
 
   def destroy
     group = Taskgroup.find_by_task_id(params[:id]).group_id
     Atask.find(params[:id]).destroy
     Taskgroup.find_by_task_id(params[:id]).destroy
-    studentanswer = Studentanswer.where(task_id: params[:id])
-    studentanswer.each do|s|
-      unless s.answer.nil?
-        s.answer.destroy
-        s.answer.save
-      end
-      s.destroy
-      s.save
+    answers = Studentanswer.first.answers(params[:id])
+    answers.each do |ans|
+      ans.destroy
+      ans.save
+    end
+    stanswers = Studentanswer.first.stanswers(params[:id])
+    stanswers.each do |stans|
+      stans.destroy
+      stans.save
     end
     redirect_to group_path(group)
   end

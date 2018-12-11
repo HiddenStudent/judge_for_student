@@ -15,9 +15,9 @@ class CreateAnswerJob < ApplicationJob
         student_answer.sending = true
         student_answer.save
         answer.save
+        puts "::Answer updated"
       end
     end
-    puts "::Answer updated"
   end
 
   handle_asynchronously :perform

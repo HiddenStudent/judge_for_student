@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181211085554) do
+ActiveRecord::Schema.define(version: 20181211134646) do
 
   create_table "answers", force: :cascade do |t|
     t.text "content"
@@ -76,11 +76,9 @@ ActiveRecord::Schema.define(version: 20181211085554) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "task_id", default: 0
     t.string "activation_digest"
     t.boolean "activated", default: false
     t.string "picture", default: "no"
-    t.integer "group_id", default: 0
     t.integer "studentanswer_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

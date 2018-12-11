@@ -15,9 +15,6 @@ class GroupsController < ApplicationController
   def create
     @group = Group.new(group_params)
     if @group.save
-      user = current_user
-      user.group_id = @group.id
-      user.save
       flash[:success] = "Group was created"
       redirect_to administration_path
     end
@@ -28,12 +25,8 @@ class GroupsController < ApplicationController
   end
 
   def show
-    @group = Group.find_by(params[:id])
-    taskgroups = Group.find(params[:id]).taskgroups
-    @tasks = []
-    taskgroups.each do |taskgroup|
-      @tasks += [taskgroup.atask]
-    end
+    @group = Group.find(params[:id])
+    @tasks = @group.show_tasks(params[:id])
   end
 
   def update

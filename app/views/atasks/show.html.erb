@@ -9,7 +9,7 @@
       <%else%>
         <h3 style="color:#ff0000">[<%= @studentsanswer.status %>]</h3>
       <%end%>
-      <% unless @studentsanswer.status == "complete" || @final == true%>
+      <% unless @studentsanswer.status == "complete" || @studentsanswer.final == true%>
         <%=link_to "Send my answer", new_answ_path(params[:id]) , class: "btn btn-lg btn-primary" %>
       <% else %>
         <h3>Ur task is done..Or u mark answer as final.</h3>

@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
 
- # before_action :activated
- # before_action :logged_in_user
- # before_action :teacher , except: [:update]
+  before_action :activated
+  before_action :logged_in_user
+  before_action :teacher , except: [:update]
 
   def index
     @users = User.all
@@ -44,7 +44,6 @@ class UsersController < ApplicationController
     @answer.final = false
     @answer.answer_id = nil
     if @answer.save
-     # StudentMailer.info_status(@user,params[:text],@answer).deliver_now
       flash[:success] = "Email about changes was sent to student."
       redirect_to administration_path
     else
@@ -54,8 +53,8 @@ class UsersController < ApplicationController
   end
 
   def update_task_id
-    unless User.find(params[:id]).studentanswers.nil?
-      if User.find(params[:id]).studentanswers.find_by_task_id(params[:task_id]).nil?
+    unless current_user.tasks_user(params[:id]).nil?
+      if current_user.student_task_user(params[:task_id],params[:id]).nil?
         @students_answ = Studentanswer.new do |u|
           u.task_id = params[:task_id]
           u.user_id = params[:id]

@@ -21,22 +21,21 @@ class AnswController < ApplicationController
   end
 
   def show
-    @users = []
-    ids = Studentanswer.where(task_id: params[:id])
-    ids.each do |u|
-      @users += [u.user]
-    end
+    @users = Atask.first.users_in_task(params[:id])
     @answers = Studentanswer.where(task_id: params[:id])
+    unless @answer.nil?
+      @finals = @answer.finals
+    else
+      @finals = nil
+    end
   end
 
   def show_report
-    testt = params[:test]
-    @code = testt
+    @code = params[:test]
     res =  RestClient.post 'https://api.judge0.com/submissions/?base64_encoded=false&wait=false/',
-                           {language_id: '4', source_code: "#{testt}"}
+                           {language_id: '4', source_code: "#{@code}"}
     res = JSON.parse(res)    #  Parsing JSON file
-    res = res["token"]
-    text = RestClient.get  "https://api.judge0.com/submissions/#{res}?
+    text = RestClient.get  "https://api.judge0.com/submissions/#{res["token"]}?
                                base64_encoded=false&fields=status,language,time&page=4&per_page=2"
     @text = text.split(',')
   end
@@ -52,13 +51,8 @@ class AnswController < ApplicationController
           @answer = Answer.new(content:params[:answ][:content])
           if @answer.save
             @test.update_attributes(status: "In process", answer_id: @answer.id)
-            if params[:answ][:final] == '1'
-              @test.final = true
-            end
+            @test.final = true if params[:answ][:final] == '1'
             @test.save
-            user = User.find(current_user.id)
-            user.studentanswer_id = @test.id
-            user.save
             flash[:success] = " Ur answer was creating"
             redirect_to root_path
           end
@@ -67,13 +61,8 @@ class AnswController < ApplicationController
           @answer.content = params[:answ][:content]
           if @answer.save
             @test.update_attributes(status: "In process")
-            if params[:answ][:final] == '1'
-              @test.final = true
-            end
+            @test.final = true if params[:answ][:final] == '1'
             @test.save
-            user = User.find(current_user.id)
-            user.studentanswer_id = @test.id
-            user.save
             flash[:success] = "Ur answer was updating"
             redirect_to root_path
           end

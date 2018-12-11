@@ -1,7 +1,10 @@
 Hi <%= @user.email.split('@').first %>,
 
 
-We want to notify you about the change of your status in the task:
+  We want to notify you about the change of your status in the task:
 
-  Ur answer's status was changed: [<% @user.status %>]
-Comment: [<%= @text %>
+
+
+  Ur answer's status was changed: status: [<%= @answer.status %>], sending: [<%= @answer.sending %>]
+
+  Comment: [<%= @text %>]

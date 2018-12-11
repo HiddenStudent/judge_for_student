@@ -39,8 +39,8 @@ class SendToDropboxAllJob < ApplicationJob
     end
 
     File.open(zipfile_name) do |f|
-      client.upload_by_chunks "/task#{task_id}_#{Random.new.rand(100)}", f
+      client.upload_by_chunks "/#{zipfile_name.split('/').last}", f
+      puts "::All answer was sent to Dropbox"
     end
-    puts "::All answer was sent to Dropbox"
   end
 end

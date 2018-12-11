@@ -6,11 +6,13 @@ class TeacherAdminController < ApplicationController
 
   def download_user
     SendToDropboxJob.set(wait: 5.seconds).perform_later(params[:id],params[:format])
+    flash[:success] = "Answer was sent to Dropbox"
     redirect_to administration_path
   end
 
   def download_all
     SendToDropboxAllJob.set(wait: 5.seconds).perform_later(params[:id])
+    flash[:success] = "Answers was sent to Dropbox"
     redirect_to administration_path
   end
 
