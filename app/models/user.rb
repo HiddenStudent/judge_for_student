@@ -6,8 +6,6 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   #validates_attachment_content_type :picture, :content_type => /\Aimage\/.*\Z/
   #validates :task_id, presence: true
-  belongs_to :atasks, optional: true
-  belongs_to :answers, optional:true
   has_many :studentanswers
   mount_uploader :picture, PictureUploader
 
