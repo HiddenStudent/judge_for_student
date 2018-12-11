@@ -102,16 +102,6 @@ class AnswController < ApplicationController
     params.require(:answer).permit(:content)
   end
 
-    #redirect_to url_with_protocol("google.com")
-    #AnswController.do_it
-
 end
 
 
-
-#  res = RestClient.get 'https://api.judge0.com/languages'
-#  puts "--------------------------------------------------------------------------------------------------------------------------------------------------------------"
-#  puts res
-#  puts "--------------------------------------------------------------------------------------------------------------------------------------------------------------"
-
-#include <stdio.h>\n\nint main(void) {\n  char name[10];\n  scanf(\"%s\", name);\n  printf(\"hello, %s\n\", name);\n  return 0;\n}

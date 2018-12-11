@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
 
-
-
   resources :email_notify, only: [:edit]        #email
 
   resources :activation, only: [:edit]

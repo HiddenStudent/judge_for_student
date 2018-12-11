@@ -6,7 +6,6 @@ class TeacherAdminController < ApplicationController
 
   def download_user
     SendToDropboxJob.set(wait: 5.seconds).perform_later(params[:id],params[:format])
-    flash[:success] = "===============PARAMS: #{params}"
     redirect_to administration_path
   end
 
