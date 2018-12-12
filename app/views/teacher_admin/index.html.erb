@@ -8,7 +8,7 @@
     <%= link_to "Group", group_path(Group.find_by_teacher_id(current_user.id)) , class: "btn btn-lg btn-primary" %>
   <%end%>
   <p></p>
-  <%= link_to "Create new student", new_users_path , class: "btn btn-lg btn-primary" %>
+  <%= link_to "Create new student", new_user_path , class: "btn btn-lg btn-primary" %>
   <p></p>
 
 </div>

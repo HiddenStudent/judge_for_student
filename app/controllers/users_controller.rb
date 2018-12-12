@@ -4,6 +4,12 @@ class UsersController < ApplicationController
   before_action :logged_in_user
   before_action :teacher , except: [:update]
 
+
+  def new
+    @user = User.new
+  end
+
+
   def index
     @users = User.all
   end
@@ -14,92 +20,56 @@ class UsersController < ApplicationController
       redirect_to  users_rework_path(params[:id],params[:feedback][:content],params[:feedback][:ans_id])
     elsif params[:complete] == 'complete'
       redirect_to  users_complete_path(params[:id],params[:feedback][:content],params[:feedback][:ans_id])
-    else
-      redirect_to administration_path
     end
   end
 
   def edit_complete
-    @user = User.find(params[:id])
+    Studentanswer.find(params[:ans_id]).update_attributes(status:"complete")
     @answer = Studentanswer.find(params[:ans_id])
-    @answer.status = "complete"
-    if @answer.save
-      StudentMailer.info_status(@user,params[:text],@answer).deliver_now
-      flash[:success] = "Email about changes was sent to student"
-      redirect_to administration_path
-    else
-      flash[:danger] = "something went wrong"
-      redirect_to administration_path
-    end
+    StudentMailer.info_status(User.find(params[:id]),params[:text],@answer).deliver_now
+    flash[:success] = "Email about changes was sent to student"
+    redirect_to administration_path
   end
 
   def edit_rework
-    @user = User.find(params[:id])
     @answer = Studentanswer.find(params[:ans_id])
-    @answer.status = "rework"
-    @answer.sending = false
-    ans = Answer.find(@answer.answer_id)
-    ans.destroy
-    ans.save
-    @answer.final = false
-    @answer.answer_id = nil
-    if @answer.save
-      flash[:success] = "Email about changes was sent to student."
-      redirect_to administration_path
-    else
-      flash[:danger] = "something went wrong"
-      redirect_to administration_path
-    end
+    Answer.find(@answer.answer_id).destroy
+    @answer.update_attributes(status:"rework",sending:"false",final:"false",answer_id:nil)
+    @answer.save
+    StudentMailer.info_status(User.find(params[:id]),params[:text],@answer).deliver_now
+    flash[:success] = "Email about changes was sent to student."
+    redirect_to administration_path
   end
 
   def update_task_id
-    unless current_user.tasks_user(params[:id]).nil?
       if current_user.student_task_user(params[:task_id],params[:id]).nil?
-        @students_answ = Studentanswer.new do |u|
-          u.task_id = params[:task_id]
-          u.user_id = params[:id]
-          u.save
-        end
-          @students_answ.save
-          user = User.find(params[:id])
-          user.studentanswer_id = @students_answ.id
-          user.save
-          StudentMailer.new_task_notify(User.find(params[:id]),
-                                        Atask.find(params[:task_id])).deliver_now
-          flash[:success] = "Student was added"
-          redirect_to edit_atask_url(params[:task_id])
+        @students_answ = Studentanswer.new(task_id:params[:task_id],user_id:params[:id])
+        @students_answ.save
+        flash[:success] = "Student was added"
+        redirect_to edit_atask_url(params[:task_id])
+        StudentMailer.new_task_notify(User.find(params[:id]),
+                                      Atask.find(params[:task_id])).deliver_now
       else
         flash[:danger] = "This student already added"
         redirect_to edit_atask_url(params[:task_id])
       end
-    else
-      @students_answ = Studentanswer.new do |u|
-        u.task_id = params[:task_id]
-        u.user_id = params[:id]
-        u.save
-      end
-        @students_answ.save
-        user = User.find(params[:id])
-        user.studentanswer_id = @students_answ.id
-        user.save
-
-        StudentMailer.new_task_notify(User.find(params[:id]),
-                                      Atask.find(params[:task_id])).deliver_now
-        flash[:success] = "Student was added"
-        redirect_to edit_atask_url(params[:task_id])
-    end
   end
 
   def destroy
-    User.find(params[:id]).destroy
-    flash[:success] = "User deleted"
-    redirect_to index_user_path
+    unless User.find(params[:id]).teacher?
+      User.find(params[:id]).destroy
+      unless Studentanswer.first.nil?
+        Studentanswer.first.u_answers(params[:id]).destroy unless Studentanswer.find_by_user_id
+        (params[:id]).answer_id.nil?
+      end
+      Studentanswer.where(user_id: params[:id]).delete_all
+      flash[:danger] = "User was deleted"
+      redirect_to root_path
+    else
+      flash[:danger] = "U have no permissions"
+      redirect_to root_path
+    end
   end
-
-  def new
-    @user = User.new
-  end
-
 
   def create
     @user = User.new(user_params)
@@ -115,10 +85,8 @@ class UsersController < ApplicationController
   end
 
   def update
-
     unless  params[:user][:picture].nil?
       @user = current_user.update user_avatar
-      #if @user.save
       flash[:success] = "Avatar was uploaded!"
       redirect_to root_path
     else

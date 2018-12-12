@@ -22,7 +22,7 @@ class User < ApplicationRecord
 
   def student_task_user(task_id,user_id)
     ids = "SELECT id FROM studentanswers
-           WHERE studentanswers.user_id = #{user_id} AND studentanswers.task_id = #{task_id}"
+           WHERE user_id = #{user_id} AND task_id = #{task_id}"
     Studentanswer.where("id IN (#{ids})").first
   end
 

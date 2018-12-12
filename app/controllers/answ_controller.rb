@@ -23,8 +23,8 @@ class AnswController < ApplicationController
   def show
     @users = Atask.first.users_in_task(params[:id])
     @answers = Studentanswer.where(task_id: params[:id])
-    unless @answer.nil?
-      @finals = @answer.finals
+    unless Studentanswer.find_by_final(true).nil?
+      @finals = true
     else
       @finals = nil
     end
@@ -43,42 +43,31 @@ class AnswController < ApplicationController
 
   def create_answ
     CreateAnswerJob.set(wait: 5.seconds).perform_later(1)
-    user = User.find(current_user.id)
-    @test =user.studentanswers.find_by_task_id(params[:answ][:task_id])
+    @test = User.first.student_task_user(params[:answ][:task_id],current_user.id)
     unless params[:answ][:content].blank?
       if params[:create] == 'Create'
         if @test.answer_id.nil?
           @answer = Answer.new(content:params[:answ][:content])
-          if @answer.save
-            @test.update_attributes(status: "In process", answer_id: @answer.id)
-            @test.final = true if params[:answ][:final] == '1'
-            @test.save
-            flash[:success] = " Ur answer was creating"
-            redirect_to root_path
-          end
+          @answer.save
         else
-          @answer = Answer.find(@test.answer_id)
-          @answer.content = params[:answ][:content]
-          if @answer.save
-            @test.update_attributes(status: "In process")
-            @test.final = true if params[:answ][:final] == '1'
-            @test.save
-            flash[:success] = "Ur answer was updating"
-            redirect_to root_path
-          end
+          @answer = Answer.find(@test.answer_id).update_attributes(content:params[:answ][:content])
+          @answer.save
         end
-      else
-        redirect_to answ_report_path(params[:answ][:content])
+        @test.update_attributes(status: "In process", answer_id: @answer.id, final: params[:answ][:final])
+        @test.save
+        flash[:success] = " Ur answer was created"
+        redirect_to root_path
+        else
+          redirect_to answ_report_path(params[:answ][:content])
       end
     else
       flash[:danger] = 'Field can\'t be blank '
-      render 'new'
+      redirect_to new_answ_url(params[:answ][:task_id])
     end
   end
 
   def destroy
-    user = User.find(params[:id])
-    studentanswer =user.studentanswers.find_by_task_id(params[:format])
+    studentanswer = User.first.student_task_user(params[:format],params[:id])
     Answer.find(studentanswer.answer_id).destroy unless studentanswer.answer_id.nil?
     studentanswer.destroy
     studentanswer.save

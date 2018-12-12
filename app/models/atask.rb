@@ -2,8 +2,11 @@
 class Atask < ApplicationRecord
   has_many :users
   #belongs_to :tasks_group
-  has_one :answer
+  #has_one :answer
+  has_many :studentanswers
   validates :content, presence: true, length: { maximum: 200 }
+  validates :name, presence: true, length: { minimum: 1 ,message: "only allows letters"}
+  validates :content, presence: true, length: { minimum: 1,message: "only allows letters" }
 
   def users_in_task(task_id)
     ids = "SELECT user_id FROM studentanswers

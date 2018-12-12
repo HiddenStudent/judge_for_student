@@ -3,7 +3,7 @@
   <div class="center jumbotron">
     <% unless @studentsanswer.nil?  %>
       <h1> My task : </h1>
-      <h3>{<%= @task.content %>}</h3>
+      <h3>{<%= Atask.find(@studentsanswer.task_id).content%>}</h3>
       <%if @studentsanswer.status == "complete" %>
         <h3 style="color:#008000">[<%= @studentsanswer.status %>]</h3>
       <%else%>

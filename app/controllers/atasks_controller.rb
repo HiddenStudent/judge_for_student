@@ -21,6 +21,8 @@ class AtasksController < ApplicationController
       task.save
       flash[:success] = "Task was created"
       redirect_to group_url(params[:atask][:group_id])
+    else
+      redirect_to new_atask_url(params[:atask][:group_id])
     end
   end
 
@@ -33,31 +35,26 @@ class AtasksController < ApplicationController
     @task = Atask.find(params[:id])
     if @task.update_attributes(task_params)
       flash[:success] = "Task updated"
-      redirect_to administration_tasks_path
+      redirect_to group_url(Taskgroup.find_by_task_id(params[:id]).group_id)
     else
-      render 'edit'
+      redirect_to edit_atask_url(params[:id])
     end
   end
 
   def show
-    @task = Atask.find(params[:id])
-    @studentsanswer = @task.studentanswers(params[:id],current_user.id)
-
+    @studentsanswer = Atask.first.studentanswers(params[:id],current_user.id)
   end
 
   def destroy
     group = Taskgroup.find_by_task_id(params[:id]).group_id
     Atask.find(params[:id]).destroy
     Taskgroup.find_by_task_id(params[:id]).destroy
-    answers = Studentanswer.first.answers(params[:id])
-    answers.each do |ans|
-      ans.destroy
-      ans.save
-    end
-    stanswers = Studentanswer.first.stanswers(params[:id])
-    stanswers.each do |stans|
-      stans.destroy
-      stans.save
+    unless Studentanswer.first.nil?
+      stanswers = Studentanswer.first.stanswers(params[:id])
+      stanswers.each do |stans|
+        Answer.find(stans.answer_id).destroy unless stans.answer_id.nil?
+        Studentanswer.find(stans.id).destroy
+      end
     end
     redirect_to group_path(group)
   end

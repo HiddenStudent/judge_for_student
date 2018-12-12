@@ -17,6 +17,8 @@ class GroupsController < ApplicationController
     if @group.save
       flash[:success] = "Group was created"
       redirect_to administration_path
+    else
+      render 'new'
     end
   end
 

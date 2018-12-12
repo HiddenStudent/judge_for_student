@@ -4,7 +4,6 @@ class ActivationController < ApplicationController
     user = User.find_by(email: params[:email])
     if !user.activated? && user.activation_digest == params[:id]
       user.activate
-      #log_in user
       flash[:success] = "Account activated!"
       redirect_to root_path
     else

@@ -1,7 +1,4 @@
   <% provide(:title, 'Send Task') %>
-
-
-
     <div class="center jumbotron">
     <div class="row">
       <div class="col-md-6 col-md-offset-3">
@@ -10,7 +7,7 @@
               <%=f.label :content %>
               <%=f.text_area :content, class: 'form-control' ,placeholder: "Compose new answer" %>
               <%= f.label :final %>
-              <%= f.check_box :final%>
+              <%= f.check_box :final,{},"true","false"%>
               <%= f.hidden_field :task_id, value: params[:format] %>
               <%=f.submit "Create",name: 'create', class: "btn btn-lg btn-primary" %>
               <p></p>
