@@ -5,7 +5,7 @@
      <%=render @tasks %>
      <%if current_teacher(params[:id])%>
        <div class="center jumbotron">
-         <%=link_to "Add new task", new_atask_path(params[:id]), class: "btn btn-lg btn-primary" %>
+         <%=link_to "Add new task", new_task_path(params[:id]), class: "btn btn-lg btn-primary" %>
        </div>
      <%end%>
    </ul>

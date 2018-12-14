@@ -5,4 +5,4 @@ Hi <%= @user.email.split('@').first %>,
 
 <%=@task.content %>
 
-U can already <%= link_to "send ur answer", atask_url(@task.id) %>
+U can already <%= link_to "send ur answer", task_url(@task.id) %>

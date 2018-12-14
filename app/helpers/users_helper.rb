@@ -16,7 +16,7 @@ end
   resources :activation, only: [:edit]
   resources :teacher_admin_controller
   resources :answ
-  resources :atasks
+  resources :tasks
   resources :users
   resources :groups
 

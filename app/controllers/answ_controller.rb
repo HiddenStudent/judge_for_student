@@ -3,27 +3,13 @@ class AnswController < ApplicationController
   before_action :logged_in_user
   before_action :activated
 
-
-  def edit
-
-  end
-
-  def index
-
-  end
-
-  def update
-
-  end
-
   def new
-
   end
 
   def show
-    @users = Atask.first.users_in_task(params[:id])
-    @answers = Studentanswer.where(task_id: params[:id])
-    unless Studentanswer.find_by_final(true).nil?
+    @users = Task.first.users_in_task(params[:id])
+    @answers = StudentAnswer.where(task_id: params[:id])
+    unless @answers.find_by_final(true).nil?
       @finals = true
     else
       @finals = nil
@@ -36,22 +22,27 @@ class AnswController < ApplicationController
                            {language_id: '4', source_code: "#{@code}"}
     res = JSON.parse(res)    #  Parsing JSON file
     text = RestClient.get  "https://api.judge0.com/submissions/#{res["token"]}?
-                               base64_encoded=false&fields=status,language,time&page=4&per_page=2"
+                            #{judge_params} "
     @text = text.split(',')
   end
 
 
   def create_answ
-    CreateAnswerJob.set(wait: 5.seconds).perform_later(1)
-    @test = User.first.student_task_user(params[:answ][:task_id],current_user.id)
+    @test = User.first.student_task_user(params[:answ][:task_id], current_user.id)
     unless params[:answ][:content].blank?
       if params[:create] == 'Create'
         if @test.answer_id.nil?
-          @answer = Answer.new(content:params[:answ][:content])
+          puts "1"
+          @answer = Answer.new(text: params[:answ][:content],content: params[:answ][:content] )
+          puts "2"
           @answer.save
+          puts "3"
         else
-          @answer = Answer.find(@test.answer_id).update_attributes(content:params[:answ][:content])
+          puts "4"
+          @answer = Answer.find(@test.answer_id).update_attributes(text: params[:answ][:content], content: params[:answ][:content])
+          puts "5"
           @answer.save
+          puts "6"
         end
         @test.update_attributes(status: "In process", answer_id: @answer.id, final: params[:answ][:final])
         @test.save
@@ -64,6 +55,7 @@ class AnswController < ApplicationController
       flash[:danger] = 'Field can\'t be blank '
       redirect_to new_answ_url(params[:answ][:task_id])
     end
+    CreateAnswerJob.set(wait: 5.seconds).perform_later(1)
   end
 
   def destroy

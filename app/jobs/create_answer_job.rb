@@ -5,11 +5,11 @@ class CreateAnswerJob < ApplicationJob
     sleep 10
     @answers = Answer.all
     @answers.each do |answer|
-      student_answer = Studentanswer.find_by_answer_id(answer.id)
+      student_answer = StudentAnswer.find_by_answer_id(answer.id)
       next if student_answer.sending == true
-      unless answer.content.nil?
+      unless answer.text.nil?
         res =  RestClient.post 'https://api.judge0.com/submissions/?base64_encoded=false&wait=false/',
-                             {language_id: '4', source_code: "#{answer.content}"}
+                             {language_id: '4', source_code: "#{answer.text}"}
         res = JSON.parse(res)    #  Parsing JSON file
         answer.content = res["token"]
         student_answer.sending = true

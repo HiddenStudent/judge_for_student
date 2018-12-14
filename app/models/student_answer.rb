@@ -1,23 +1,23 @@
-class Studentanswer < ApplicationRecord
+class StudentAnswer < ApplicationRecord
   has_one :user
   has_one :answer
-  has_one :atask
+  has_one :task
   def answers(task_id)
-    ids = "SELECT answer_id FROM studentanswers
+    ids = "SELECT answer_id FROM student_answers
            WHERE task_id = #{task_id}"
     Answer.where("id IN (#{ids})")
   end
 
   def u_answers(user_id)
-    ids = "SELECT answer_id FROM studentanswers
+    ids = "SELECT answer_id FROM student_answers
            WHERE user_id = #{user_id}"
     Answer.where("id IN (#{ids})")
   end
 
   def stanswers(task_id)
-    ids = "SELECT id FROM studentanswers
+    ids = "SELECT id FROM student_answers
            WHERE task_id = #{task_id}"
-    Studentanswer.where("id IN (#{ids})")
+    StudentAnswer.where("id IN (#{ids})")
   end
 
 end

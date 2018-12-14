@@ -24,15 +24,15 @@ class UsersController < ApplicationController
   end
 
   def edit_complete
-    Studentanswer.find(params[:ans_id]).update_attributes(status:"complete")
-    @answer = Studentanswer.find(params[:ans_id])
-    StudentMailer.info_status(User.find(params[:id]),params[:text],@answer).deliver_now
+    StudentAnswer.find(params[:ans_id]).update_attributes(status:"complete")
+    @answer = StudentAnswer.find(params[:ans_id])
+    StudentMailer.info_status(User.find(params[:id]), params[:text], @answer).deliver_now
     flash[:success] = "Email about changes was sent to student"
     redirect_to administration_path
   end
 
   def edit_rework
-    @answer = Studentanswer.find(params[:ans_id])
+    @answer = StudentAnswer.find(params[:ans_id])
     Answer.find(@answer.answer_id).destroy
     @answer.update_attributes(status:"rework",sending:"false",final:"false",answer_id:nil)
     @answer.save
@@ -42,27 +42,27 @@ class UsersController < ApplicationController
   end
 
   def update_task_id
-      if current_user.student_task_user(params[:task_id],params[:id]).nil?
-        @students_answ = Studentanswer.new(task_id:params[:task_id],user_id:params[:id])
+      if current_user.student_task_user(params[:task_id], params[:id]).nil?
+        @students_answ = StudentAnswer.new(task_id: params[:task_id], user_id: params[:id])
         @students_answ.save
         flash[:success] = "Student was added"
-        redirect_to edit_atask_url(params[:task_id])
+        redirect_to edit_task_url(params[:task_id])
         StudentMailer.new_task_notify(User.find(params[:id]),
-                                      Atask.find(params[:task_id])).deliver_now
+                                      Task.find(params[:task_id])).deliver_now
       else
         flash[:danger] = "This student already added"
-        redirect_to edit_atask_url(params[:task_id])
+        redirect_to edit_task_url(params[:task_id])
       end
   end
 
   def destroy
     unless User.find(params[:id]).teacher?
       User.find(params[:id]).destroy
-      unless Studentanswer.first.nil?
-        Studentanswer.first.u_answers(params[:id]).destroy unless Studentanswer.find_by_user_id
+      unless StudentAnswer.first.nil?
+        StudentAnswer.first.u_answers(params[:id]).destroy unless StudentAnswer.find_by_user_id
         (params[:id]).answer_id.nil?
       end
-      Studentanswer.where(user_id: params[:id]).delete_all
+      StudentAnswer.where(user_id: params[:id]).delete_all
       flash[:danger] = "User was deleted"
       redirect_to root_path
     else
@@ -73,8 +73,8 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    token = @user.new_token
-    @user.activation_digest = token
+    @user.generate_activation_digest!
+
     if @user.save
       StudentMailer.activation(@user).deliver_now
       flash[:info] = "Email for user was sent."

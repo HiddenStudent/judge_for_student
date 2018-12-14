@@ -33,11 +33,11 @@ Rails.application.routes.draw do
 
   match 'check_answ/:id' => 'teacher_admin#check_answ', :via => :get, :as => :check_answ
 
-  get 'atasks_show', to: 'atasks#show'
+  get 'atasks_show', to: 'tasks#show'
 
   resources :teacher_admin_controller
   resources :answ
-  resources :atasks
+  resources :tasks
   resources :users
   resources :groups
 
