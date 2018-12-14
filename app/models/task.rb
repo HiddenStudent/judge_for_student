@@ -10,19 +10,19 @@ class Task < ApplicationRecord
   validates :content, presence: true, length: { minimum: 1, message: "only allows letters" }
 
   def users_in_task(task_id)
-    ids = "SELECT user_id FROM student_answers
+    ids = "SELECT user_id FROM answers
            WHERE task_id = #{task_id}"
     User.where("id IN (#{ids})")
   end
 
   def studentanswers(task_id, user_id)
-    StudentAnswer.where("id IN (SELECT id FROM student_answers
+    Answer.where("id IN (SELECT id FROM answers
                     WHERE task_id = #{task_id} AND user_id = #{user_id})").first
   end
 
   def finals
-    ids = "SELECT id FROM studentanswers
+    ids = "SELECT id FROM answers
            WHERE status = #{complete}"
-    StudentAnswer.where("id IN (#{ids})")
+    Answer.where("id IN (#{ids})")
   end
 end

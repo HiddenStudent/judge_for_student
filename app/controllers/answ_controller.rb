@@ -4,11 +4,12 @@ class AnswController < ApplicationController
   before_action :activated
 
   def new
+    #@answer = Answer.new
   end
 
   def show
     @users = Task.first.users_in_task(params[:id])
-    @answers = StudentAnswer.where(task_id: params[:id])
+    @answers = Answer.where(task_id: params[:id])
     unless @answers.find_by_final(true).nil?
       @finals = true
     else
@@ -28,7 +29,24 @@ class AnswController < ApplicationController
 
 
   def create_answ
+    unless params[:answ][:content].blank?
+      if params[:create] == 'Create'
+        answer = User.first.u_answers(current_user.id, params[:answ][:task_id])
+        answer.update_attributes(text: params[:answ][:content], status: "In process", final: params[:answ][:final])
+        answer.save
+        flash[:success] = " Ur answer was created"
+        redirect_to root_path
+        CreateAnswerJob.delay.perform_now
+      else
+          redirect_to answ_report_path(params[:answ][:content])
+      end
+    else
+        flash[:danger] = 'Field can\'t be blank '
+        redirect_to new_answ_url(params[:answ][:task_id])
+    end
+  end
 
+=begin
     test = User.first.student_task_user(params[:answ][:task_id], current_user.id)
     unless params[:answ][:content].blank?
       if params[:create] == 'Create'
@@ -57,7 +75,7 @@ class AnswController < ApplicationController
     end
     #CreateAnswerJob.set(wait: 5.seconds).perform_later(1)
     CreateAnswerJob.delay.perform_now
-  end
+=end
 
   def destroy
     studentanswer = User.first.student_task_user(params[:format],params[:id])

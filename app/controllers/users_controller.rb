@@ -15,35 +15,42 @@ class UsersController < ApplicationController
   end
 
   def edit_feedback
+    puts "==========#{params}"
     params[:feedback][:content] = "no comment" if params[:feedback][:content].blank?
     if params[:rework] == 'rework'
-      redirect_to  users_rework_path(params[:id],params[:feedback][:content],params[:feedback][:ans_id])
+      redirect_to  users_rework_path(params[:id], params[:feedback][:content], params[:task_id])
     elsif params[:complete] == 'complete'
-      redirect_to  users_complete_path(params[:id],params[:feedback][:content],params[:feedback][:ans_id])
+      redirect_to  users_complete_path(params[:id], params[:feedback][:content], params[:task_id])
     end
   end
 
   def edit_complete
-    StudentAnswer.find(params[:ans_id]).update_attributes(status:"complete")
-    @answer = StudentAnswer.find(params[:ans_id])
-    StudentMailer.info_status(User.find(params[:id]), params[:text], @answer).deliver_now
+    answer = User.first.u_answers(params[:id], params[:task_id])
+    answer.update_attributes(status:"complete")
+    answer.save
+    #Answer.find(params[:ans_id]).update_attributes(status:"complete")
+   # @answer = Answer.find(params[:ans_id])
+    StudentMailer.info_status(User.find(params[:id]), params[:text], answer).deliver_now
     flash[:success] = "Email about changes was sent to student"
     redirect_to administration_path
   end
 
   def edit_rework
-    @answer = StudentAnswer.find(params[:ans_id])
-    Answer.find(@answer.answer_id).destroy
-    @answer.update_attributes(status:"rework",sending:"false",final:"false",answer_id:nil)
-    @answer.save
-    StudentMailer.info_status(User.find(params[:id]),params[:text],@answer).deliver_now
+    answer = User.first.u_answers(params[:id], params[:task_id])
+    answer.update_attributes(status:"rework", sending:"false", final: "false", content: nil, text: nil)
+    answer.save
+   # @answer = Answer.find(params[:ans_id])
+  #  Answer.find(@answer.answer_id).destroy
+  #  @answer.update_attributes(status:"rework",sending:"false",final:"false",answer_id:nil)
+    #@answer.save
+    StudentMailer.info_status(User.find(params[:id]), params[:text], answer).deliver_now
     flash[:success] = "Email about changes was sent to student."
     redirect_to administration_path
   end
 
   def update_task_id
       if current_user.student_task_user(params[:task_id], params[:id]).nil?
-        students_answ = StudentAnswer.new(task_id: params[:task_id], user_id: params[:id])
+        students_answ = Answer.new(task_id: params[:task_id], user_id: params[:id])
         students_answ.save
         flash[:success] = "Student was added"
         redirect_to edit_task_url(params[:task_id])
@@ -58,14 +65,14 @@ class UsersController < ApplicationController
   def destroy
     unless User.find(params[:id]).teacher?
       User.find(params[:id]).destroy
-      unless StudentAnswer.first.nil?
-        unless StudentAnswer.find_by_user_id(params[:id]).nil?
-          unless StudentAnswer.find_by_user_id(params[:id]).answer_id.nil?
-        StudentAnswer.first.u_answers(params[:id]).destroy
+      unless Answer.first.nil?
+        unless Answer.find_by_user_id(params[:id]).nil?
+          unless Answer.find_by_user_id(params[:id]).answer_id.nil?
+        Answer.first.u_answers(params[:id]).destroy
           end
           end
       end
-      StudentAnswer.where(user_id: params[:id]).delete_all
+      Answer.where(user_id: params[:id]).delete_all
       flash[:danger] = "User was deleted"
       redirect_to root_path
     else

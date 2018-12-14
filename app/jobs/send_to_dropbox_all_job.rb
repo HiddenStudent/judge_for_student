@@ -4,7 +4,7 @@ class SendToDropboxAllJob < ApplicationJob
   def perform(task_id)
     puts "-------------------------|||||||||||-----------------------------------"
     client = DropboxApi::Client.new("wf9D-O0OWuAAAAAAAAAASt0sZwocWVpB3FCm903NkPOApJdhpZAV9AViT_ErtJy1")
-    answers = StudentAnswer.where(task_id: task_id)
+    answers = Answer.where(task_id: task_id)
     arr = []
     answers.each do |answer|
       next unless answer.status == "complete"
@@ -14,7 +14,7 @@ class SendToDropboxAllJob < ApplicationJob
       arr += [file]
       print arr
       File.open(filepath, "w+") do |f|
-        text = RestClient.get "https://api.judge0.com/submissions/#{Answer.find(answer.answer_id).content}?
+        text = RestClient.get "https://api.judge0.com/submissions/#{answer.content}?
                                #{judge_params}"
         f.write(text)
       end

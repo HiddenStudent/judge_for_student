@@ -24,10 +24,10 @@ Rails.application.routes.draw do
   get 'administration_download_user/:id' => 'teacher_admin#download_user', :via => :get, :as => :administration_download_user
   get 'administration_download_users/:id' => 'teacher_admin#download_all', :via => :get, :as => :administration_download_users
 
-  match 'users_complete/:id/:text/:ans_id' => 'users#edit_complete' , :via => :get, :as => :users_complete
-  match 'users_rework/:id/:text/:ans_id' => 'users#edit_rework' , :via => :get, :as => :users_rework
+  match 'users_complete/:id/:text/:task_id' => 'users#edit_complete' , :via => :get, :as => :users_complete
+  match 'users_rework/:id/:text/:task_id' => 'users#edit_rework' , :via => :get, :as => :users_rework
 
-  match 'users_feedback/:id' => 'users#edit_feedback' , :via => :post, :as => :users_feedback
+  match 'users_feedback/:id/:task_id' => 'users#edit_feedback' , :via => :post, :as => :users_feedback
 
   match 'user_update_task/:id/:task_id' => 'users#update_task_id', :via => :put, :as => :user_update_task
 

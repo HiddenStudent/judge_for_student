@@ -20,26 +20,26 @@ class User < ApplicationRecord
   end
 
   def tasks(task_id, user_id)
-    ids = "SELECT task_id FROM student_answers
+    ids = "SELECT task_id FROM answers
            WHERE user_id = #{user_id} AND task_id = #{task_id}"
     Task.where("id IN (#{ids})").first
   end
 
-  def student_task_user(task_id,user_id)
-    ids = "SELECT id FROM student_answers
+  def student_task_user(task_id, user_id)
+    ids = "SELECT id FROM answers
            WHERE user_id = #{user_id} AND task_id = #{task_id}"
-    StudentAnswer.where("id IN (#{ids})").first
+    Answer.where("id IN (#{ids})").first
   end
 
   def tasks_user(user_id)
-    ids = "SELECT id FROM student_answers
+    ids = "SELECT id FROM answers
            WHERE student_answers.user_id = #{user_id}"
-    StudentAnswer.where("id IN (#{ids})")
+    Answer.where("id IN (#{ids})")
   end
 
   def u_answers(user_id, task_id)
-    ids = "SELECT id FROM student_answers
+    ids = "SELECT id FROM answers
            WHERE user_id = #{user_id} AND task_id = #{task_id}"
-    StudentAnswer.where("id IN (#{ids})").first
+    Answer.where("id IN (#{ids})").first
   end
 end

@@ -5,7 +5,7 @@ class TeacherAdminController < ApplicationController
 
 
   def download_user
-    SendToDropboxJob.set(wait: 5.seconds).perform_later(params[:id],params[:format])
+    SendToDropboxJob.set(wait: 5.seconds).perform_later(params[:id], params[:format])
     flash[:success] = "Answer was sent to Dropbox"
     redirect_to administration_path
   end
@@ -18,8 +18,8 @@ class TeacherAdminController < ApplicationController
 
   def check_answ
     @user = User.find_by_id(params[:id])
-    @answer_id = @user.student_task_user(params[:format],params[:id])
-    text = RestClient.get "https://api.judge0.com/submissions/#{Answer.find(@answer_id.answer_id).content}?
+    @answer = @user.student_task_user(params[:format], params[:id])
+    text = RestClient.get "https://api.judge0.com/submissions/#{@answer.content}?
                             #{judge_params}"
     @text = text.split(',')
   end

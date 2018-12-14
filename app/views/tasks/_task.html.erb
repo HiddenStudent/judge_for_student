@@ -2,8 +2,8 @@
     <%if current_teacher(params[:id])%>
       <%= link_to "Task: #{task.name} ", task_path(task) , class: "btn btn-lg btn-primary" %>
       <%= link_to "Edit: ", edit_task_path(task) , class: "btn btn-lg btn-primary" %>
-      <% @users_all = StudentAnswer.where(task_id: task.id) %>
-      <% @users_sent = StudentAnswer.where(task_id: task.id, sending: true) %>
+      <% @users_all = Answer.where(task_id: task.id) %>
+      <% @users_sent = Answer.where(task_id: task.id, sending: true) %>
       <%=link_to "[ #{@users_sent.count} /  #{@users_all.count} ]",    answ_path(task)   %>
       <%= link_to "[delete task]", task, method: :delete, data: { confirm: "You sure?" } %>
     <%else%>

@@ -3,14 +3,13 @@
   <div class="left jumbotron">
     <h1> Student's answer: </h1>
     <div class="center jumbotron">
-      <%=params%>
-      <% if @answer_id.status == "complete" %>
-        <h3 style="color:#008000">[<%= @answer_id.status %>]</h3>
+      <% if @answer.status == "complete" %>
+        <h3 style="color:#008000">[<%= @answer.status %>]</h3>
       <%else%>
-        <h3 style="color:#ff0000">[<%= @answer_id.status %>]</h3>
+        <h3 style="color:#ff0000">[<%= @answer.status %>]</h3>
       <% end %>
 
-      <% if @answer_id.final == true %>
+      <% if @answer.final == true %>
         <h3 style="color:#008000">[<%= "final" %>]</h3>
       <% else %>
         <h3 style="color:#ff0000">[<%= "not final" %>]</h3>
@@ -21,22 +20,20 @@
       <p><%=text%></p>
       <%break if text == "compile_output"%>
     <%end%>
-
     <div class="center jumbotron">
       <h4>
-        <%unless @answer_id.status == "complete" %>
-          <%= form_for(:feedback, url: users_feedback_path(@user)) do |f| %>
+        <%unless @answer.status == "complete" %>
+          <%= form_for(:feedback, url: users_feedback_path(@user, params[:format])) do |f| %>
             <%= f.label :content %>
             <%= f.text_area :content, class: 'form-control', placeholder: "Compose the feedback..." %>
-            <%= f.hidden_field :ans_id, value: @answer_id.id %>
-            <%if @answer_id.final%>
+            <%if @answer.final%>
               <%= f.submit "complete", name: 'complete', class: "btn btn-primary" %>
             <%end%>
             <p>  </p>
             <%= f.submit "rework", name: 'rework', class: "btn btn-primary" %>
           <%end%>
         <%else%>
-          <%= link_to "Download this task", administration_download_user_url(params[:id], params[:format]), class: "btn btn-primary" %>
+          <%= link_to "Download this task", administration_download_user_url(params[:id],@answer.task_id), class: "btn btn-primary" %>
         <%end%>
       </h4>
     </div>

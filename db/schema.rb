@@ -10,13 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181214131628) do
+ActiveRecord::Schema.define(version: 20181214152236) do
 
   create_table "answers", force: :cascade do |t|
-    t.text "content"
+    t.integer "user_id"
+    t.integer "answer_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "task_id"
+    t.boolean "sending", default: false
+    t.boolean "final", default: false
+    t.string "status", default: "In process"
     t.string "text"
+    t.string "content"
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
@@ -40,19 +46,6 @@ ActiveRecord::Schema.define(version: 20181214131628) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "student_answers", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "answer_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "task_id"
-    t.boolean "sending", default: false
-    t.boolean "final", default: false
-    t.string "status", default: "In process"
-    t.string "text"
-    t.string "content"
   end
 
   create_table "task_groups", force: :cascade do |t|

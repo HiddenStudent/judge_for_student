@@ -3,23 +3,19 @@ class CreateAnswerJob < ApplicationJob
 
   def perform
     puts "----------------------------------------------"
-    @answers = Answer.all
-    @answers.each do |answer|
-      student_answer = StudentAnswer.find_by_answer_id(answer.id)
-      next if student_answer.sending == true
+    answers = Answer.all
+    answers.each do |answer|
+      next if answer.sending == true
       unless answer.text.nil?
         res =  RestClient.post 'https://api.judge0.com/submissions/?base64_encoded=false&wait=false/',
                              {language_id: '4', source_code: "#{answer.text}"}
         res = JSON.parse(res)    #  Parsing JSON file
         answer.content = res["token"]
-        student_answer.sending = true
-        student_answer.save
+        answer.sending = true
         answer.save
         puts "::Answer updated"
       end
     end
   end
-
   Delayed::Job.enqueue CreateAnswerJob.new, run_at: 20.seconds.from_now
-
 end
