@@ -28,24 +28,24 @@ class AnswController < ApplicationController
 
 
   def create_answ
-    @test = User.first.student_task_user(params[:answ][:task_id], current_user.id)
+
+    test = User.first.student_task_user(params[:answ][:task_id], current_user.id)
     unless params[:answ][:content].blank?
       if params[:create] == 'Create'
-        if @test.answer_id.nil?
-          puts "1"
-          @answer = Answer.new(text: params[:answ][:content],content: params[:answ][:content] )
-          puts "2"
-          @answer.save
-          puts "3"
+        if test.answer_id.nil?
+
+          answer = Answer.new(text: params[:answ][:content],content: params[:answ][:content] )
+
+          answer.save
+
         else
-          puts "4"
-          @answer = Answer.find(@test.answer_id).update_attributes(text: params[:answ][:content], content: params[:answ][:content])
-          puts "5"
-          @answer.save
-          puts "6"
+          answer = Answer.find(test.answer_id).update_attributes(text: params[:answ][:content], content: params[:answ][:content])
+
+          answer.save
+
         end
-        @test.update_attributes(status: "In process", answer_id: @answer.id, final: params[:answ][:final])
-        @test.save
+        test.update_attributes(status: "In process", answer_id: answer.id, final: params[:answ][:final])
+        test.save
         flash[:success] = " Ur answer was created"
         redirect_to root_path
         else
@@ -55,7 +55,8 @@ class AnswController < ApplicationController
       flash[:danger] = 'Field can\'t be blank '
       redirect_to new_answ_url(params[:answ][:task_id])
     end
-    CreateAnswerJob.set(wait: 5.seconds).perform_later(1)
+    #CreateAnswerJob.set(wait: 5.seconds).perform_later(1)
+    CreateAnswerJob.delay.perform_now
   end
 
   def destroy

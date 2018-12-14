@@ -1,5 +1,5 @@
 class Group < ApplicationRecord
-  has_many :task_groups
+  has_many :task_groups, dependent: :destroy
   validates :name,  presence: true, length: { maximum: 50 }
   validates :name,  presence: true, length: { minimum: 1 }
 

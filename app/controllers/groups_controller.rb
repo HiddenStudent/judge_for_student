@@ -22,21 +22,15 @@ class GroupsController < ApplicationController
     end
   end
 
-  def edit
-
-  end
-
   def show
     @group = Group.find(params[:id])
     @tasks = @group.show_tasks(params[:id])
   end
 
-  def update
-
-  end
-
   def destroy
-
+    Group.find(params[:id]).destroy
+    flash[:danger] = "group was deleted"
+    redirect_to administration_path
   end
 
   private

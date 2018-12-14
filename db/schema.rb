@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181213155649) do
+ActiveRecord::Schema.define(version: 20181214131628) do
 
   create_table "answers", force: :cascade do |t|
     t.text "content"
@@ -51,6 +51,8 @@ ActiveRecord::Schema.define(version: 20181213155649) do
     t.boolean "sending", default: false
     t.boolean "final", default: false
     t.string "status", default: "In process"
+    t.string "text"
+    t.string "content"
   end
 
   create_table "task_groups", force: :cascade do |t|

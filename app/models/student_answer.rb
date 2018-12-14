@@ -1,6 +1,6 @@
 class StudentAnswer < ApplicationRecord
   has_one :user
-  has_one :answer
+  belongs_to :answer,dependent: :destroy
   has_one :task
   def answers(task_id)
     ids = "SELECT answer_id FROM student_answers

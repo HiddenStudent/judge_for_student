@@ -33,6 +33,8 @@ Rails.application.routes.draw do
 
   match 'check_answ/:id' => 'teacher_admin#check_answ', :via => :get, :as => :check_answ
 
+  match 'group/:id' => 'groups#destroy', :via => :delete, :as => :group_destroy
+
   get 'atasks_show', to: 'tasks#show'
 
   resources :teacher_admin_controller

@@ -44,14 +44,6 @@ class TasksController < ApplicationController
   def destroy
     group = TaskGroup.find_by_task_id(params[:id]).group_id
     Task.find(params[:id]).destroy
-    TaskGroup.find_by_task_id(params[:id]).destroy
-    unless StudentAnswer.first.nil?
-      stanswers = StudentAnswer.first.stanswers(params[:id])
-      stanswers.each do |stans|
-        Answer.find(stans.answer_id).destroy unless stans.answer_id.nil?
-        StudentAnswer.find(stans.id).destroy
-      end
-    end
     redirect_to group_path(group)
   end
 

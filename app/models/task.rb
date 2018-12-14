@@ -1,9 +1,10 @@
 
 class Task < ApplicationRecord
   has_many :users
+  has_many :task_groups,dependent: :destroy
   #belongs_to :tasks_group
   #has_one :answer
-  has_many :student_answers
+  has_many :student_answers, dependent: :destroy
   validates :content, presence: true, length: { maximum: 200 }
   validates :name, presence: true, length: { minimum: 1, message: "only allows letters"}
   validates :content, presence: true, length: { minimum: 1, message: "only allows letters" }

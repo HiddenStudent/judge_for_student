@@ -1,4 +1,4 @@
 class TaskGroup < ApplicationRecord
   has_one :group
-  has_one :task
+  belongs_to :task, foreign_key: 'task_id', dependent: :destroy
 end

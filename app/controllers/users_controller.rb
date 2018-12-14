@@ -43,8 +43,8 @@ class UsersController < ApplicationController
 
   def update_task_id
       if current_user.student_task_user(params[:task_id], params[:id]).nil?
-        @students_answ = StudentAnswer.new(task_id: params[:task_id], user_id: params[:id])
-        @students_answ.save
+        students_answ = StudentAnswer.new(task_id: params[:task_id], user_id: params[:id])
+        students_answ.save
         flash[:success] = "Student was added"
         redirect_to edit_task_url(params[:task_id])
         StudentMailer.new_task_notify(User.find(params[:id]),
@@ -59,8 +59,11 @@ class UsersController < ApplicationController
     unless User.find(params[:id]).teacher?
       User.find(params[:id]).destroy
       unless StudentAnswer.first.nil?
-        StudentAnswer.first.u_answers(params[:id]).destroy unless StudentAnswer.find_by_user_id
-        (params[:id]).answer_id.nil?
+        unless StudentAnswer.find_by_user_id(params[:id]).nil?
+          unless StudentAnswer.find_by_user_id(params[:id]).answer_id.nil?
+        StudentAnswer.first.u_answers(params[:id]).destroy
+          end
+          end
       end
       StudentAnswer.where(user_id: params[:id]).delete_all
       flash[:danger] = "User was deleted"

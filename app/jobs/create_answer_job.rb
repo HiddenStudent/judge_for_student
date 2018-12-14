@@ -1,8 +1,8 @@
 class CreateAnswerJob < ApplicationJob
   queue_as :low_priority
 
-  def perform(t)
-    sleep 10
+  def perform
+    puts "----------------------------------------------"
     @answers = Answer.all
     @answers.each do |answer|
       student_answer = StudentAnswer.find_by_answer_id(answer.id)
@@ -20,6 +20,6 @@ class CreateAnswerJob < ApplicationJob
     end
   end
 
-  handle_asynchronously :perform
+  Delayed::Job.enqueue CreateAnswerJob.new, run_at: 20.seconds.from_now
 
 end

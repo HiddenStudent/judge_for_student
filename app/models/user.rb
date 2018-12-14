@@ -36,4 +36,10 @@ class User < ApplicationRecord
            WHERE student_answers.user_id = #{user_id}"
     StudentAnswer.where("id IN (#{ids})")
   end
+
+  def u_answers(user_id, task_id)
+    ids = "SELECT id FROM student_answers
+           WHERE user_id = #{user_id} AND task_id = #{task_id}"
+    StudentAnswer.where("id IN (#{ids})").first
+  end
 end
