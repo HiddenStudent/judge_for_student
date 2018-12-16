@@ -1,10 +1,8 @@
 class User < ApplicationRecord
-
+  has_many :answers, dependent: :destroy
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   mount_uploader :picture, PictureUploader
-
-  has_many :student_answers
 
   def activate
     update_columns(activated: true)
@@ -12,7 +10,6 @@ class User < ApplicationRecord
 
   def generate_activation_digest!
     self.activation_digest = User.new_digest
-   # @user.activation_digest = SecureRandom.urlsafe_base64
   end
 
   def User.new_digest
@@ -23,18 +20,6 @@ class User < ApplicationRecord
     ids = "SELECT task_id FROM answers
            WHERE user_id = #{user_id} AND task_id = #{task_id}"
     Task.where("id IN (#{ids})").first
-  end
-
-  def student_task_user(task_id, user_id)
-    ids = "SELECT id FROM answers
-           WHERE user_id = #{user_id} AND task_id = #{task_id}"
-    Answer.where("id IN (#{ids})").first
-  end
-
-  def tasks_user(user_id)
-    ids = "SELECT id FROM answers
-           WHERE student_answers.user_id = #{user_id}"
-    Answer.where("id IN (#{ids})")
   end
 
   def u_answers(user_id, task_id)

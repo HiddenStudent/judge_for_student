@@ -7,9 +7,9 @@
     <ul>
       <% @users.each do |user|%>
         <p>
-          <% @answ = @answers.find_by_user_id(user.id) %>
+          <% answ = @answers.find_by_user_id(user.id) %>
           <%= user.email.split('@').first %>
-          <% if @answ.nil? || @answ.sending == false  %>
+          <% if answ.nil? || answ.sending == false  %>
             [not sent]
           <%else%>
             <%= link_to "[sent]", check_answ_path(user,params[:id]) %>

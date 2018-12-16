@@ -13,9 +13,7 @@ class TasksController < ApplicationController
     if task.save
       tasks_group = TaskGroup.new(task_id: task.id, group_id: params[:task][:group_id])
       tasks_group.save
-      task.taskgroup_id = tasks_group.id
-      task.save
-      flash[:success] = "Task was created"
+      flash[:success] = 'Task was created'
       redirect_to group_url(params[:task][:group_id])
     else
       redirect_to new_task_url(params[:task][:group_id])
@@ -30,7 +28,7 @@ class TasksController < ApplicationController
   def update
     @task = Task.find(params[:id])
     if @task.update_attributes(task_params)
-      flash[:success] = "Task updated"
+      flash[:success] = 'Task updated'
       redirect_to group_url(TaskGroup.find_by_task_id(params[:id]).group_id)
     else
       redirect_to edit_task_url(params[:id])
@@ -38,7 +36,7 @@ class TasksController < ApplicationController
   end
 
   def show
-    @studentsanswer = Task.first.studentanswers(params[:id], current_user.id)
+    @student_answer = Answer.where(task_id: params[:id], user_id: current_user.id).first
   end
 
   def destroy

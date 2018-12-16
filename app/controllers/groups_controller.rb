@@ -15,7 +15,7 @@ class GroupsController < ApplicationController
   def create
     @group = Group.new(group_params)
     if @group.save
-      flash[:success] = "Group was created"
+      flash[:success] = 'Group was created'
       redirect_to administration_path
     else
       render 'new'
@@ -29,7 +29,7 @@ class GroupsController < ApplicationController
 
   def destroy
     Group.find(params[:id]).destroy
-    flash[:danger] = "group was deleted"
+    flash[:danger] = 'group was deleted'
     redirect_to administration_path
   end
 

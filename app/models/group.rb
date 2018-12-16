@@ -8,11 +8,4 @@ class Group < ApplicationRecord
            WHERE group_id = #{group_id}"
     Task.where("id IN (#{ids})")
   end
-
-  def gr_tasks(group_id)
-    ids = "SELECT id FROM task_groups
-           WHERE group_id = #{group_id}"
-    TaskGroup.where("id IN (#{ids})")
-  end
-
 end

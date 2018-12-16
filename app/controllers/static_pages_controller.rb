@@ -12,10 +12,6 @@ class StaticPagesController < ApplicationController
 
   end
 
-  def log_in
-
-  end
-
   def contact
 
   end
