@@ -3,7 +3,7 @@ class SendToDropboxJob < ApplicationJob
 
   def perform(id, task_id)
     puts '-----------------------Sending to Dropbox----------------------------'
-    client = DropboxApi::Client.new('wf9D-O0OWuAAAAAAAAAASt0sZwocWVpB3FCm903NkPOApJdhpZAV9AViT_ErtJy1')
+    client = DropboxApi::Client.new(ENV["DROPBOX_TOKEN"])
     user = User.find(id)
     answer = user.u_answers(id, task_id)
     text = RestClient.get "https://api.judge0.com/submissions/#{answer.content}?

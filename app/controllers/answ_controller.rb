@@ -31,7 +31,9 @@ class AnswController < ApplicationController
         answer.save
         flash[:success] = 'Ur answer was created'
         redirect_to root_path
-        CreateAnswerJob.delay.perform_now
+        if Delayed::Job.all.where(name: 'CreateAnswerJob').nil?
+          CreateAnswerJob.delay.perform_now
+        end
       else
         redirect_to answ_report_path(params[:answ][:content])
       end

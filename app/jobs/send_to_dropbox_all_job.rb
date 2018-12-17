@@ -3,7 +3,7 @@ class SendToDropboxAllJob < ApplicationJob
 
   def perform(task_id)
     puts '----------------------Sending to Dropbox-----------------------------'
-    client = DropboxApi::Client.new('wf9D-O0OWuAAAAAAAAAASt0sZwocWVpB3FCm903NkPOApJdhpZAV9AViT_ErtJy1')
+    client = DropboxApi::Client.new(ENV["DROPBOX_TOKEN"])
     answers = Answer.where(task_id: task_id)
     arr = []
     answers.each do |answer|
@@ -22,9 +22,9 @@ class SendToDropboxAllJob < ApplicationJob
 
     require 'rubygems'
     require 'zip'
-    folder = "#{Dir.pwd}/stuff_to_zip"
+    folder = "#{Rails.root}/stuff_to_zip"
     input_filenames = arr
-    zipfile_name = "#{Dir.pwd}/archives/archive_task#{task_id}_#{Random.new.rand(100)}.zip"
+    zipfile_name = "#{Rails.root}/archives/archive_task#{task_id}_#{Random.new.rand(100)}.zip"
     Zip::File.open(zipfile_name, Zip::File::CREATE) do |zipfile|
       input_filenames.each do |filename|
         zipfile.add(filename, File.join(folder, filename))

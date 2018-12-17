@@ -1,11 +1,13 @@
 
 class Task < ApplicationRecord
   has_many :users
-  has_many :task_groups, dependent: :destroy
+  has_many :task_groups
   has_many :answers, dependent: :destroy
-  validates :content, presence: true, length: { maximum: 200 }
-  validates :name, presence: true, length: { minimum: 1, message: "only allows letters"}
+  validates :content, presence: true, length: { maximum: 1000 }
   validates :content, presence: true, length: { minimum: 1, message: "only allows letters" }
+  validates :name, presence: true, length: { maximum: 50 }
+  validates :name, presence: true, length: { minimum: 1, message: "only allows letters"}
+
 
   def users_in_task(task_id)
     ids = "SELECT user_id FROM answers
