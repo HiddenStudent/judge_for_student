@@ -23,7 +23,7 @@ class UsersController < ApplicationController
 
   def edit_complete
     answer = Answer.where(user_id: params[:id], task_id: params[:task_id]).last
-    answer.update_attributes(status: 'complete')
+    answer.update_attributes(status: 'complete', feedback: params[:text])
     answer.save
     StudentMailer.info_status(User.find(params[:id]), params[:text], answer).deliver_now
     flash[:success] = 'Email about changes was sent to student'
@@ -32,7 +32,7 @@ class UsersController < ApplicationController
 
   def edit_rework
     answer = Answer.where(user_id: params[:id], task_id: params[:task_id]).last
-    answer.update_attributes(status: 'rework', sending: 'false', final: 'false')
+    answer.update_attributes(status: 'rework', sending: 'false', final: 'false', feedback: params[:text])
     answer.save
 
     StudentMailer.info_status(User.find(params[:id]), params[:text], answer).deliver_now

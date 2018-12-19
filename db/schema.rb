@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181219100007) do
+ActiveRecord::Schema.define(version: 20181219103639) do
 
   create_table "answers", force: :cascade do |t|
     t.integer "user_id"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20181219100007) do
     t.string "status", default: "In process"
     t.string "text"
     t.string "content"
+    t.string "feedback"
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
