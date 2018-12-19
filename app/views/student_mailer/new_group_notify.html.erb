@@ -1,0 +1,11 @@
+
+
+<p>Hi <%= @user.email.split('@').first %>,</p>
+
+<p>
+  We want to notify you about new group:
+</p>
+
+<p><%=@group.name%></p>
+
+<p> U can already <%= link_to "send ur answer", group_url(@group.id) %></p>

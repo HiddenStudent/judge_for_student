@@ -1,5 +1,5 @@
 class TeacherAdminController < ApplicationController
-
+  before_action :logged_in_user
   before_action :teacher
   before_action :activated
 
@@ -18,7 +18,7 @@ class TeacherAdminController < ApplicationController
 
   def check_answ
     @user = User.find_by_id(params[:id])
-    @answer = Answer.where(task_id: params[:format], user_id: params[:id]).first
+    @answer = Answer.where(task_id: params[:format], user_id: params[:id]).last
     text = RestClient.get "https://api.judge0.com/submissions/#{@answer.content}?
                             #{judge_params}"
     @text = text.split(',')

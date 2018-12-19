@@ -2,12 +2,14 @@ class AnswController < ApplicationController
 
   before_action :logged_in_user
   before_action :activated
-
+  before_action :teacher, only: [:destroy]
   def show
     @finals = nil
-    @users = Task.first.users_in_task(params[:id])
+    @users = User.where("id IN (SELECT user_id  FROM group_users
+                          WHERE group_id = #{params[:group_id]})")
     @answers = Answer.where(task_id: params[:id])
-    @finals = true unless @answers.find_by_final(true).nil?
+    @answers_complete = Answer.where(task_id: params[:id], status: 'complete')
+    @finals = true unless @answers_complete.find_by_final(true).nil?
   end
 
   def show_report
@@ -22,20 +24,16 @@ class AnswController < ApplicationController
 
   def create_answ
     if params[:answ][:content].blank?
-      flash[:danger] = 'Field can\'t be blank '
+      flash[:danger] = 'Field can\'t be blank'
       redirect_to new_answ_url(params[:answ][:task_id])
     else
       if params[:create] == 'Create'
-        answer = Answer.where(user_id: current_user.id, task_id: params[:answ][:task_id]).first
-        answer.update_attributes(text: params[:answ][:content], status: 'In process', final: params[:answ][:final])
+        answer = Answer.new(user_id: current_user.id, task_id: params[:answ][:task_id],text: params[:answ][:content], status: 'In process', final: params[:answ][:final])
         answer.save
         flash[:success] = 'Ur answer was created'
         redirect_to root_path
-        if Delayed::Job.all.where(name: 'CreateAnswerJob').nil?
-          CreateAnswerJob.delay.perform_now
-        end
       else
-        redirect_to answ_report_path(params[:answ][:content])
+        redirect_to answ_report_path(params[:answ][:text])
       end
     end
   end

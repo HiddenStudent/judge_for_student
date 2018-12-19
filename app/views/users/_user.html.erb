@@ -6,7 +6,7 @@
     <%end%>
 
     <%if @meta%>
-        <%= link_to "Add to task" , user_update_task_path(user,@task), method: :put, data:{confirm: "You sure?"} %>
+        <%= link_to "Add to group" , user_update_task_path(user,@group), method: :put, data:{confirm: "You sure?"} %>
     <%end%>
   <%end%>
 </li>

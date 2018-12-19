@@ -7,9 +7,9 @@ class StudentMailer < ApplicationMailer
     mail to: user.email, subject: 'Information about task'
   end
 
-  def new_task_notify(user, task)
+  def new_group_notify(user, group)
     @user = user
-    @task = task
+    @group = group
     mail to: user.email, subject: 'Information about task'
   end
 

@@ -7,6 +7,7 @@ class CreateAnswerJob < ApplicationJob
     answers.each do |answer|
       next if answer.sending
       next unless answer.text
+      next unless answer.status =='In process'
         res = RestClient.post 'https://api.judge0.com/submissions/?base64_encoded=false&wait=false/',
                               {language_id: '4', source_code: "#{answer.text}"}
         res = JSON.parse(res) #  Parsing JSON file

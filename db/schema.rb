@@ -10,11 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181214152236) do
+ActiveRecord::Schema.define(version: 20181219100007) do
 
   create_table "answers", force: :cascade do |t|
     t.integer "user_id"
-    t.integer "answer_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "task_id"
@@ -41,6 +40,13 @@ ActiveRecord::Schema.define(version: 20181214152236) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
+  create_table "group_users", force: :cascade do |t|
+    t.integer "group_id"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "groups", force: :cascade do |t|
     t.integer "teacher_id"
     t.string "name"
@@ -60,7 +66,6 @@ ActiveRecord::Schema.define(version: 20181214152236) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
-    t.integer "taskgroup_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -75,7 +80,6 @@ ActiveRecord::Schema.define(version: 20181214152236) do
     t.string "activation_digest"
     t.boolean "activated", default: false
     t.string "picture", default: "no"
-    t.integer "studentanswer_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

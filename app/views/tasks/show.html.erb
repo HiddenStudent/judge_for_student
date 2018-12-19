@@ -1,20 +1,21 @@
 <% provide(:title,"My task") %>
 
   <div class="center jumbotron">
+    <h1> My task : </h1>
     <% unless @student_answer.nil?  %>
-      <h1> My task : </h1>
-      <h3>{<%= Task.find(@student_answer.task_id).content%>}</h3>
+      <h3>{<%= @task.content%>}</h3>
       <%if @student_answer.status == "complete" %>
         <h3 style="color:#008000">[<%= @student_answer.status %>]</h3>
       <%else%>
         <h3 style="color:#ff0000">[<%= @student_answer.status %>]</h3>
       <%end%>
-      <% unless @student_answer.status == "complete" || @student_answer.final == true%>
+      <% unless @student_answer.status == "complete" || @student_answer.final == true || @student_answer.status == "In process"  %>
         <%=link_to "Send my answer", new_answ_path(params[:id]) , class: "btn btn-lg btn-primary" %>
       <% else %>
-        <h3>Ur task is done..Or u mark answer as final.</h3>
+        <h3>Ur task is done..Or u already sent the task.</h3>
       <% end %>
     <% else %>
-      <h3>U have no any tasks...</h3>
+      <h3>{<%= @task.content%>}</h3>
+      <%=link_to "Send my answer", new_answ_path(params[:id]) , class: "btn btn-lg btn-primary" %>
     <%end%>
   </div>

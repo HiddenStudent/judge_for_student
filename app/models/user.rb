@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   has_many :answers, dependent: :destroy
+  has_many :group_users, dependent: :destroy
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   mount_uploader :picture, PictureUploader
@@ -26,5 +27,11 @@ class User < ApplicationRecord
     ids = "SELECT id FROM answers
            WHERE user_id = #{user_id} AND task_id = #{task_id}"
     Answer.where("id IN (#{ids})").first
+  end
+
+  def groups(user_id)
+    ids = "SELECT group_id FROM group_users
+           WHERE user_id = #{user_id}"
+    Group.where("id IN (#{ids})")
   end
 end

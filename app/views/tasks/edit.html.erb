@@ -13,12 +13,6 @@
                <%= f.label :content %>
                <%= f.text_area :content, class: 'form-control' %>
             </div>
-            <h3>U can add these students to this task:</h3>
-            <ul class="teacher_admin">
-            <%@users.each do |user|%>
-              <%= render user %>
-            <%end%>
-            </ul>
             <%=f.submit "Save changes", class: "btn btn-primary" %>
           <%end%>
         </div>

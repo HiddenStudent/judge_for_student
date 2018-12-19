@@ -7,7 +7,7 @@
     <ul>
       <% @users.each do |user|%>
         <p>
-          <% answ = @answers.find_by_user_id(user.id) %>
+          <% answ = @answers.where(user_id: user.id).last %>
           <%= user.email.split('@').first %>
           <% if answ.nil? || answ.sending == false  %>
             [not sent]
@@ -21,7 +21,7 @@
       <%unless @finals.nil?%>
         <div class="center jumbotron">
           <%= link_to "Download all tasks as archive",
-                      administration_download_users_path(@answers.first.task_id), class: "btn btn-primary" %>
+                      administration_download_users_path(@answers_complete.first.task_id), class: "btn btn-primary" %>
         </div>
       <%end%>
     </ul>

@@ -3,8 +3,7 @@ class UsersController < ApplicationController
   before_action :activated
   before_action :logged_in_user
   before_action :teacher, except: [:update]
-
-
+  include UsersHelper
   def new
     @user = User.new
   end
@@ -23,7 +22,7 @@ class UsersController < ApplicationController
   end
 
   def edit_complete
-    answer = Answer.where(user_id: params[:id], task_id: params[:task_id]).first
+    answer = Answer.where(user_id: params[:id], task_id: params[:task_id]).last
     answer.update_attributes(status: 'complete')
     answer.save
     StudentMailer.info_status(User.find(params[:id]), params[:text], answer).deliver_now
@@ -32,25 +31,26 @@ class UsersController < ApplicationController
   end
 
   def edit_rework
-    answer = Answer.where(user_id: params[:id], task_id: params[:task_id]).first
-    answer.update_attributes(status: 'rework', sending: 'false', final: 'false', content: nil, text: nil)
+    answer = Answer.where(user_id: params[:id], task_id: params[:task_id]).last
+    answer.update_attributes(status: 'rework', sending: 'false', final: 'false')
     answer.save
+
     StudentMailer.info_status(User.find(params[:id]), params[:text], answer).deliver_now
     flash[:success] = 'Email about changes was sent to student.'
     redirect_to administration_path
   end
 
-  def update_task_id
-    if Answer.where(task_id: params[:task_id], user_id: params[:id]).first.nil?
-      students_answ = Answer.new(task_id: params[:task_id], user_id: params[:id])
-      students_answ.save
+  def update_group_id
+    if GroupUser.where(group_id: params[:group_id], user_id: params[:id]).first.nil?
+      group_user = GroupUser.new(group_id: params[:group_id], user_id: params[:id])
+      group_user.save
       flash[:success] = 'Student was added'
-      redirect_to edit_task_url(params[:task_id])
-      StudentMailer.new_task_notify(User.find(params[:id]),
-                        Task.find(params[:task_id])).deliver_now
+      redirect_to edit_group_url(params[:group_id])
+      StudentMailer.new_group_notify(User.find(params[:id]),
+                                     Group.find(params[:group_id])).deliver_now
     else
       flash[:danger] = 'This student already added'
-      redirect_to edit_task_url(params[:task_id])
+      redirect_to edit_group_url(params[:group_id])
     end
   end
 
@@ -59,6 +59,7 @@ class UsersController < ApplicationController
       flash[:danger] = 'U have no permissions'
       redirect_to root_path
     else
+      dropbox_delete(params[:id])
       User.find(params[:id]).destroy
       flash[:danger] = 'User was deleted'
       redirect_to root_path
@@ -79,7 +80,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    if params[:user][:picture].nil?
+    if user_avatar.nil?
       flash[:danger] = 'Please choose the file...'
       redirect_to root_path
     else
@@ -99,7 +100,7 @@ class UsersController < ApplicationController
   private
 
   def user_avatar
-    params.require(:user).permit(:picture)
+    params.require(:user).permit(:picture) unless params[:user].nil?
   end
 
 end

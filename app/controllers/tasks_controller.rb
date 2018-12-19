@@ -1,7 +1,7 @@
 class TasksController < ApplicationController
 
   before_action :logged_in_user
-  before_action :teacher, only: [:create,:update,:edit,:new]
+  before_action :teacher, except: [:show]
   before_action :activated
 
   def new
@@ -36,7 +36,8 @@ class TasksController < ApplicationController
   end
 
   def show
-    @student_answer = Answer.where(task_id: params[:id], user_id: current_user.id).first
+    @task = Task.find(params[:id])
+    @student_answer = Answer.where(task_id: params[:id], user_id: current_user.id).last
   end
 
   def destroy

@@ -14,6 +14,7 @@ module StudentApp
     config.active_job.queue_adapter = :delayed_job
 
 
+
     config.generators do |g|
       g.orm :active_record, primary_key_type: :uuid
     end
@@ -23,6 +24,19 @@ module StudentApp
       YAML.load(File.open(env_file)).each do |key, value|
         ENV[key.to_s] = value
       end if File.exists?(env_file)
+    end
+
+    config.after_initialize do
+      unless Delayed::Job.first.nil?
+        Delayed::Job.all.each do |job|
+          if job.name == 'CreateAnswerJob'
+            @tmp = true
+          end
+        end
+        CreateAnswerJob.delay.perform_now unless @tmp
+      else
+        CreateAnswerJob.delay.perform_now
+      end
     end
 
     # Settings in config/environments/* take precedence over those specified here.

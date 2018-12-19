@@ -21,11 +21,13 @@ Rails.application.routes.draw do
 
   match 'users_feedback/:id/:task_id' => 'users#edit_feedback', :via => :post, :as => :users_feedback
 
-  match 'user_update_task/:id/:task_id' => 'users#update_task_id', :via => :put, :as => :user_update_task
+  match 'user_update_group/:id/:group_id' => 'users#update_group_id', :via => :put, :as => :user_update_task
 
   match 'check_answ/:id' => 'teacher_admin#check_answ', :via => :get, :as => :check_answ
 
   match 'group/:id' => 'groups#destroy', :via => :delete, :as => :group_destroy
+
+  match 'answ_show/:id/:group_id' => 'answ#show', :via => :get, :as => :answ_show
 
   resources :teacher_admin_controller
   resources :answ

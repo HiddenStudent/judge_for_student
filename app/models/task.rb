@@ -1,7 +1,5 @@
 
 class Task < ApplicationRecord
-  has_many :users
-  has_many :task_groups
   has_many :answers, dependent: :destroy
   validates :content, presence: true, length: { maximum: 1000 }
   validates :content, presence: true, length: { minimum: 1, message: "only allows letters" }
